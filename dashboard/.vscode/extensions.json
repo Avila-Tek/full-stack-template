@@ -1,9 +1,3 @@
 {
-  "recommendations": [
-    "avilatek.avila-tek-extensions",
-    "ms-vscode-remote.remote-containers",
-    "ms-azuretools.vscode-docker",
-    "kettanaito.nako",
-    "miguelsolorio.min-theme"
-  ]
+  "recommendations": ["avilatek.avila-tek-extensions"]
 }

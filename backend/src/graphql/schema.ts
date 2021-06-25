@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import schemaComposer from './schemaComposer';
+import { schemaComposer } from 'graphql-compose';
 import Query from './Query';
 import Mutation from './Mutation';
 import CustomMutation from './CustomMutation';
@@ -18,6 +18,6 @@ schemaComposer.Mutation.addFields({
 const schema = schemaComposer.buildSchema();
 
 // Generate GraphQL File for easy access to Types!
-fs.writeFileSync(`${process.cwd()}/schema.graphql`, schemaComposer.toSDL());
+// fs.writeFileSync(`${process.cwd()}/schema.graphql`, schemaComposer.toSDL());
 
 export default schema;

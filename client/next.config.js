@@ -1,67 +1,27 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const withSourceMaps = require('@zeit/next-source-maps')();
-const withPlugins = require('next-compose-plugins');
-const SentryWebpackPlugin = require('@sentry/webpack-plugin');
+// This file sets a custom webpack configuration to use your Next.js app
+// with Sentry.
+// https://nextjs.org/docs/api-reference/next.config.js/introduction
+// https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
-const {
-  NEXT_PUBLIC_SENTRY_DSN: SENTRY_DSN,
-  SENTRY_ORG,
-  SENTRY_PROJECT,
-  SENTRY_AUTH_TOKEN,
-  NODE_ENV,
-  VERCEL_GITHUB_COMMIT_SHA,
-  VERCEL_GITLAB_COMMIT_SHA,
-  VERCEL_BITBUCKET_COMMIT_SHA,
-} = process.env;
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { withSentryConfig } = require('@sentry/nextjs');
 
-const COMMIT_SHA =
-  VERCEL_GITHUB_COMMIT_SHA ||
-  VERCEL_GITLAB_COMMIT_SHA ||
-  VERCEL_BITBUCKET_COMMIT_SHA;
+const moduleExports = {
+  // Your existing module.exports
+};
 
-process.env.SENTRY_DSN = SENTRY_DSN;
-const basePath = '';
+const SentryWebpackPluginOptions = {
+  // Additional config options for the Sentry Webpack plugin. Keep in mind that
+  // the following options are set automatically, and overriding them is not
+  // recommended:
+  //   release, url, org, project, authToken, configFile, stripPrefix,
+  //   urlPrefix, include, ignore
 
-module.exports = withPlugins(
-  [
-    [
-      withSourceMaps,
-      {
-        serverRuntimeConfig: {
-          rootDir: __dirname,
-        },
-        webpack: (config, options) => {
-          if (!options.isServer) {
-            config.resolve.alias['@sentry/node'] = '@sentry/react';
-          }
-          if (
-            SENTRY_DSN &&
-            SENTRY_ORG &&
-            SENTRY_PROJECT &&
-            SENTRY_AUTH_TOKEN &&
-            COMMIT_SHA &&
-            NODE_ENV === 'production'
-          ) {
-            config.plugins.push(
-              new SentryWebpackPlugin({
-                include: '.next',
-                ignore: ['node_modules'],
-                stripPrefix: ['webpack://_N_E/'],
-                urlPrefix: `~${basePath}/_next`,
-                release: COMMIT_SHA,
-              })
-            );
-          }
+  silent: true, // Suppresses all logs
+  // For all available options, see:
+  // https://github.com/getsentry/sentry-webpack-plugin#options.
+};
 
-          return config;
-        },
-        basePath,
-      },
-    ],
-  ],
-  {
-    images: {
-      domains: [''],
-    },
-  }
-);
+// Make sure adding Sentry options is the last code to run before exporting, to
+// ensure that your source maps include changes from all other Webpack plugins
+module.exports = withSentryConfig(moduleExports, SentryWebpackPluginOptions);

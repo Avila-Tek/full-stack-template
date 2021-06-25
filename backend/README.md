@@ -383,13 +383,13 @@ export const signIn = schemaComposer.createResolver<
   async resolve({ args, context }) {
     const user = await User.findOne({ email: args?.data?.email, active: true });
     if (!user) {
-      throw new Error(
+      throw new NoSentryError(
         `No se ha encontrado a un usuario con correo ${args?.data?.email}`
       );
     }
     const compare = await bcrypt.compare(args?.data?.password, user.password);
     if (!compare) {
-      throw new Error(`La contraseña es incorrecta ${args?.data?.email}`);
+      throw new NoSentryError(`La contraseña es incorrecta ${args?.data?.email}`);
     }
     const token = jwt.sign(
       JSON.stringify({

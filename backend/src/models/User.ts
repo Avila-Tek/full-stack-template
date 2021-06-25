@@ -1,7 +1,7 @@
 import { Schema, Document, model, HookNextFunction, Types } from 'mongoose';
+import { composeMongoose } from 'graphql-compose-mongoose';
 import slugs from 'slugs';
 import bcrypt from 'bcryptjs';
-import { composeWithMongoose, composeMongoose } from 'graphql-compose-mongoose';
 
 export interface UserDocument extends Document {
   slug?: string;
@@ -69,37 +69,34 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-userSchema.pre('save', async function (
-  this: UserDocument,
-  next: HookNextFunction
-) {
-  if (!this.isModified('firstName') || !this.isModified('lastName')) {
-    return next();
+userSchema.pre(
+  'save',
+  async function (this: UserDocument, next: HookNextFunction) {
+    if (!this.isModified('firstName') || !this.isModified('lastName')) {
+      return next();
+    }
+    this.slug = slugs(`${this.firstName} ${this.lastName}`);
+    const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`);
+    const withSlugs = await (this as any).constructor.find({
+      slug: slugRegEx,
+    });
+    if ((withSlugs as Array<UserDocument>).length) {
+      this.slug = `${this.slug}-${withSlugs.length + 1}`;
+    }
+    next();
   }
-  this.slug = slugs(`${this.firstName} ${this.lastName}`);
-  const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`);
-  const withSlugs = await (this as any).constructor.find({
-    slug: slugRegEx,
-  });
-  if ((withSlugs as Array<UserDocument>).length) {
-    this.slug = `${this.slug}-${withSlugs.length + 1}`;
-  }
-  next();
-});
+);
 
-userSchema.pre('save', async function (
-  this: UserDocument,
-  next: HookNextFunction
-) {
-  if (!this.isModified('password')) {
-    return next();
+userSchema.pre(
+  'save',
+  async function (this: UserDocument, next: HookNextFunction) {
+    if (!this.isModified('password')) {
+      return next();
+    }
+    this.password = await bcrypt.hash(this.password, 10);
+    next();
   }
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
-});
+);
 
 export const User = model<UserDocument>('User', userSchema);
 export const UserTC = composeMongoose(User);
-
-
-

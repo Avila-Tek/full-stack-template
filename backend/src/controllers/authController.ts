@@ -3,10 +3,11 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import browser from 'browser-detect';
+import { schemaComposer } from 'graphql-compose';
 import { v4 as uuid } from 'uuid';
+import { NoSentryError } from '../lib/NoSentryError';
 import { sendResetPasswordEmail } from '../lib/email';
 import { User, UserTC } from '../models/User';
-import schemaComposer from '../graphql/schemaComposer';
 
 type TSignInInput = {
   email: string;
@@ -36,13 +37,15 @@ export const signIn = schemaComposer.createResolver<
   async resolve({ args, context }) {
     const user = await User.findOne({ email: args?.data?.email, active: true });
     if (!user) {
-      throw new Error(
+      throw new NoSentryError(
         `No se ha encontrado a un usuario con correo ${args?.data?.email}`
       );
     }
     const compare = await bcrypt.compare(args?.data?.password, user.password);
     if (!compare) {
-      throw new Error(`La contraseña es incorrecta ${args?.data?.email}`);
+      throw new NoSentryError(
+        `La contraseña es incorrecta ${args?.data?.email}`
+      );
     }
     const token = jwt.sign(
       JSON.stringify({
@@ -142,7 +145,7 @@ export const resetPassword = schemaComposer.createResolver<
       const browserData = browser(context?.req?.headers?.['user-agent']);
       const user = await User.findOne({ email: args?.data?.email });
       if (!user) {
-        throw new Error(
+        throw new NoSentryError(
           `El usuario con correo ${args?.data?.email} no esta registrado`
         );
       }
@@ -197,7 +200,7 @@ export const changePassword = schemaComposer.createResolver<
         },
       });
       if (!user) {
-        throw new Error(`El token ha expirado`);
+        throw new NoSentryError(`El token ha expirado`);
       }
       user.password = args?.data?.password;
       user.resetToken = undefined;
