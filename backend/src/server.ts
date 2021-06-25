@@ -1,15 +1,26 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable import/newline-after-import */
 /* eslint-disable import/first */
 import dotenv from 'dotenv';
 dotenv.config({ path: './src/variables.env' });
-import mongoose from 'mongoose';
 import * as Sentry from '@sentry/node';
+import * as Tracing from '@sentry/tracing';
+import mongoose from 'mongoose';
+import { RewriteFrames } from '@sentry/integrations';
 import { ApolloServer } from 'apollo-server-express';
 import { SentryPlugin } from './plugins/sentry';
 import app from './app';
 import schema from './graphql/schema';
 
-mongoose.Promise = global.Promise;
+declare global {
+  namespace NodeJS {
+    interface Global {
+      __rootdir__: string;
+    }
+  }
+}
+
+global.__rootdir__ = process.cwd() || __dirname;
 
 mongoose
   .connect(String(process.env.DATABASE), {
@@ -17,6 +28,7 @@ mongoose
     useUnifiedTopology: true,
     useFindAndModify: false,
     useCreateIndex: true,
+    // dbName: 'test',
   })
   .then(() => {
     console.log(`🤩🍃 MongoDB is Running`);
@@ -34,7 +46,7 @@ const server: ApolloServer = new ApolloServer({
   schema,
   introspection: true,
   tracing: true,
-  // plugins: [new SentryPlugin()],
+  plugins: [new SentryPlugin()],
   context: ({ req, res }) => {
     if ((req?.body?.operationName ?? '') !== 'IntrospectionQuery') {
       console.log(
@@ -67,6 +79,16 @@ if (process.env.NODE_ENV !== 'development') {
   Sentry.init({
     dsn: process.env.SENTRY_DSN,
     tracesSampleRate: 0.5,
+    integrations: [
+      new RewriteFrames({
+        root: global.__rootdir__,
+      }),
+      new Sentry.Integrations.Http({ tracing: true }),
+      new Tracing.Integrations.Express({
+        app,
+      }),
+      new Tracing.Integrations.Mongo({ useMongoose: true }),
+    ],
   });
 }
 

@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/node';
 import express from 'express';
 import compression from 'compression';
 import bodyParser from 'body-parser';
@@ -17,5 +18,8 @@ app.use(
       process.env.NODE_ENV === 'production' ? undefined : false,
   })
 );
+app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.tracingHandler());
+app.use(Sentry.Handlers.errorHandler());
 
 export default app;

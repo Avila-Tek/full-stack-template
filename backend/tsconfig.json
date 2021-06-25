@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "watch": true,
     "target": "es6",
+    "lib": ["ESNext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": false,
-    "module": "commonjs",
+    "module": "CommonJS",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -15,6 +15,10 @@
     "noImplicitAny": true,
     "moduleResolution": "node",
     "sourceMap": true,
+    "inlineSources": true,
+    "sourceRoot": "/",
+    "noEmitHelpers": true,
+    "importHelpers": true,
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
