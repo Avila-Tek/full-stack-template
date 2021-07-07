@@ -21,6 +21,10 @@ jobs:
       - name: Build images
         working-directory: ./
         # Backend .env
+        run: |
+          touch ./backend/src/variables.env
+          touch ./dashboard/.env.local ./dashboard/sentry.properties
+          touch ./client/.env.local ./client/sentry.properties
         # - run: touch ./backend/src/variables.env
         # - run: echo "NODE_ENV=$NODE_ENV" >> ./backend/src/variables.env
         # - run: echo "PORT=$PORT" >> ./backend/src/variables.env
