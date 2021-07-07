@@ -1,0 +1,60 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      # context: .
+      dockerfile: ./backend/Dockerfile
+    image: api
+    container_name: at-api
+    env_file: ./backend/src/variables.env
+    network_mode: 'host'
+    ports:
+      - '3001:5555'
+
+  admin:
+    build:
+      # context: .
+      dockerfile: ./dashboard/Dockerfile
+    image: admin
+    container_name: at-admin
+    env_file: ./dashboard/.env.local
+    network_mode: 'host'
+    depends_on:
+      - 'api'
+    ports:
+      - '3002:3000'
+
+  client:
+    build:
+      # context: .
+      dockerfile: ./client/Dockerfile
+    image: client
+    container_name: at-client
+    env_file: ./client/.env.local
+    network_mode: 'host'
+    depends_on:
+      - 'api'
+    ports:
+      - '3003:3000'
+
+  swag:
+    image: ghcr.io/linuxserver/swag
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Caracas
+      - URL=t.onthecourt.store
+      - SUBDOMAINS=www,admin,www.admin,api,www.api
+      - VALIDATION=http
+      - EMAIL=soporte@avilatek.dev
+      - STAGING=false #optional
+    volumes:
+      - ./nginx-config:/config/nginx/site-confs
+    ports:
+      - 443:443
+      - 80:80
+    restart: unless-stopped

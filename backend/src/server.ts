@@ -12,14 +12,6 @@ import { SentryPlugin } from './plugins/sentry';
 import app from './app';
 import schema from './graphql/schema';
 
-declare global {
-  namespace NodeJS {
-    interface Global {
-      __rootdir__: string;
-    }
-  }
-}
-
 global.__rootdir__ = process.cwd() || __dirname;
 
 mongoose
