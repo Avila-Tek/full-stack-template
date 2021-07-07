@@ -36,10 +36,10 @@ services:
       - '3003:3000'
 
   swag:
-    # image: ghcr.io/linuxserver/swag
-    # container_name: swag
-    image: linuxserver/letsencrypt
-    container_name: letsencryptnginx
+    image: ghcr.io/linuxserver/swag
+    container_name: swag
+    # image: linuxserver/letsencrypt
+    # container_name: letsencryptnginx
     cap_add:
       - NET_ADMIN
     environment:
