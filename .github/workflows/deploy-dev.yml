@@ -137,5 +137,5 @@ jobs:
           echo "auth.token=$SENTRY_TOKEN_CLIENT" >> ./client/sentry.properties
           echo "cli.executable=$SENTRY_CLI_CLIENT" >> ./client/sentry.properties
           docker kill $(docker ps -q)
-          docker system prune -f
           docker-compose up -d
+          docker system prune -f
