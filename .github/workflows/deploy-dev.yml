@@ -15,9 +15,11 @@ jobs:
         working-directory: .
 
     steps:
-      - uses: actions/checkout@master
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Build images
-        working-directory: docker/base
+        working-directory: ./
         # Backend .env
         # - run: touch ./backend/src/variables.env
         # - run: echo "NODE_ENV=$NODE_ENV" >> ./backend/src/variables.env
