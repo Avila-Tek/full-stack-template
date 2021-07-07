@@ -25,6 +25,7 @@ jobs:
           touch ./backend/src/variables.env
           touch ./dashboard/.env.local ./dashboard/sentry.properties
           touch ./client/.env.local ./client/sentry.properties
+          docker-compose up -d
         # - run: touch ./backend/src/variables.env
         # - run: echo "NODE_ENV=$NODE_ENV" >> ./backend/src/variables.env
         # - run: echo "PORT=$PORT" >> ./backend/src/variables.env
@@ -55,5 +56,3 @@ jobs:
         # - run: echo "cli.executable=$SENTRY_CLI_CLIENT" >> ./client/sentry.properties
         # # Docker steps
         # - run: docker kill $(docker ps -q)
-        run: |
-          docker-compose up -d
