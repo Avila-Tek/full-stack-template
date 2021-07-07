@@ -3,7 +3,7 @@ version: '3.9'
 services:
   api:
     build:
-      # context: .
+      context: .
       dockerfile: ./backend/Dockerfile
     image: api
     container_name: at-api
@@ -14,7 +14,7 @@ services:
 
   admin:
     build:
-      # context: .
+      context: .
       dockerfile: ./dashboard/Dockerfile
     image: admin
     container_name: at-admin
@@ -27,7 +27,7 @@ services:
 
   client:
     build:
-      # context: .
+      context: .
       dockerfile: ./client/Dockerfile
     image: client
     container_name: at-client
