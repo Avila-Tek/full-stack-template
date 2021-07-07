@@ -38,6 +38,10 @@ services:
   swag:
     image: ghcr.io/linuxserver/swag
     container_name: swag
+    depends_on:
+      - api
+      - admin
+      - client
     cap_add:
       - NET_ADMIN
     environment:
@@ -50,7 +54,8 @@ services:
       - EMAIL=soporte@avilatek.dev
       - STAGING=false #optional
     volumes:
-      - ./nginx-config:/config/nginx/site-confs
+      - ./site-confs:/config/nginx/site-confs
+      - ./proxy-confs:/config/nginx/proxy-confs
     ports:
       - '443:443'
       - '80:80'
