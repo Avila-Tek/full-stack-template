@@ -74,6 +74,25 @@ server {
 
 }
 
+server {
+  listen 443 ssl;
+  listen [::]:443 ssl;
+
+  server_name client.*;
+
+  include /config/nginx/ssl.conf;
+
+  client_max_body_size 0;
+  location / {
+    include /config/nginx/proxy.conf;
+    include /config/nginx/resolver.conf;
+    set $upstream_app client;
+    set $upstream_port 3003;
+    set $upstream_proto http;
+    proxy_pass $upstream_proto://$upstream_app:$upstream_port;
+  }
+}
+
 # sample reverse proxy config without url base, but as a subdomain "cp", ip and port same as above
 # notice this is a new server block, you need a new server block for each subdomain
 #server {
