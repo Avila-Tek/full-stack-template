@@ -44,8 +44,6 @@ jobs:
           SENTRY_TOKEN_CLIENT: ${{ secrets.SENTRY_TOKEN_CLIENT }}
           SENTRY_CLI_CLIENT: ${{ secrets.SENTRY_CLI_CLIENT }}
         run: |
-          echo ${{ env.NODE_ENV }}
-          echo $NODE_ENV
           touch ./backend/src/variables.env
           touch ./dashboard/.env.local ./dashboard/sentry.properties
           touch ./client/.env.local ./client/sentry.properties
@@ -65,7 +63,6 @@ jobs:
           echo "defaults.project=$SENTRY_PROJECT_ADMIN" >> ./dashboard/sentry.properties
           echo "auth.token=$SENTRY_TOKEN_ADMIN" >> ./dashboard/sentry.properties
           echo "cli.executable=$SENTRY_CLI_ADMIN" >> ./dashboard/sentry.properties
-          cat ./dashboard/sentry.properties
           echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN_CLIENT" >> ./client/.env.local
           echo "SENTRY_SERVER_INIT_PATH=.next/server/sentry/initServerSDK.js" >> ./client/.env.local
           echo "defaults.url=$SENTRY_URL_CLIENT" >> ./client/sentry.properties
@@ -73,7 +70,6 @@ jobs:
           echo "defaults.project=$SENTRY_PROJECT_CLIENT" >> ./client/sentry.properties
           echo "auth.token=$SENTRY_TOKEN_CLIENT" >> ./client/sentry.properties
           echo "cli.executable=$SENTRY_CLI_CLIENT" >> ./client/sentry.properties
-          cat ./client/sentry.properties
-          # docker-compose up -d
+          docker-compose up -d
         # Docker steps
         # - run: docker kill $(docker ps -q)
