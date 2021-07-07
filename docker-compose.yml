@@ -6,7 +6,7 @@ services:
       context: ./backend
     image: api
     container_name: at-api
-    env_file: ./src/variables.env
+    env_file: ./backend/src/variables.env
     network_mode: 'host'
     ports:
       - '3001:5555'
@@ -16,7 +16,7 @@ services:
       context: ./dashboard
     image: admin
     container_name: at-admin
-    env_file: ./.env.local
+    env_file: ./dashboard/.env.local
     network_mode: 'host'
     depends_on:
       - 'api'
@@ -28,7 +28,7 @@ services:
       context: ./client
     image: client
     container_name: at-client
-    env_file: ./.env.local
+    env_file: ./client/.env.local
     network_mode: 'host'
     depends_on:
       - 'api'
