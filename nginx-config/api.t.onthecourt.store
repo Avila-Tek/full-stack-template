@@ -7,7 +7,12 @@ server {
   index index.html index.htm index.nginx-debian.html;
   server_name api.t.onthecourt.store www.api.t.onthecourt.store;
   location / {
-    proxy_pass http://api;
+    include /config/nginx/proxy.conf;
+    resolver 127.0.0.11 valid=30s;
+    set $upstream_app api;
+    set $upstream_port 3003;
+    set $upstream_proto http;
+    proxy_pass $upstream_proto://$upstream_app:$upstream_port;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection 'upgrade';
