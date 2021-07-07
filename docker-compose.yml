@@ -5,7 +5,7 @@ services:
     build:
       context: ./backend
     image: api
-    container_name: at-api
+    container_name: api
     env_file: ./backend/src/variables.env
     restart: unless-stopped
     ports:
@@ -15,7 +15,7 @@ services:
     build:
       context: ./dashboard
     image: admin
-    container_name: at-admin
+    container_name: admin
     env_file: ./dashboard/.env.local
     depends_on:
       - 'api'
@@ -27,7 +27,7 @@ services:
     build:
       context: ./client
     image: client
-    container_name: at-client
+    container_name: client
     env_file: ./client/.env.local
     depends_on:
       - 'api'
