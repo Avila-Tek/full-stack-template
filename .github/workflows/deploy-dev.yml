@@ -18,36 +18,37 @@ jobs:
       - uses: actions/checkout@development
       - name: Build images
         working-directory: docker/base
-      # Backend .env
-      # - run: touch ./backend/src/variables.env
-      # - run: echo "NODE_ENV=$NODE_ENV" >> ./backend/src/variables.env
-      # - run: echo "PORT=$PORT" >> ./backend/src/variables.env
-      # - run: echo "SECRET=$SECRET" >> ./backend/src/variables.env
-      # - run: echo "CLIENT_URL=$CLIENT_URL" >> ./backend/src/variables.env
-      # - run: echo "DASHBOARD_URL=$DASHBOARD_URL" >> ./backend/src/variables.env
-      # - run: echo "CLIENT_URL_WWW=$CLIENT_URL_WWW" >> ./backend/src/variables.env
-      # - run: echo "DASHBOARD_URL_WWW=$DASHBOARD_URL_WWW" >> ./backend/src/variables.env
-      # - run: echo "DATABASE=$DATABASE" >> ./backend/src/variables.env
-      # - run: echo "SENTRY_DSN=$SENTRY_DSN" >> ./backend/src/variables.env
-      # # Admin .env
-      # - run: touch ./dashboard/.env.local ./dashboard/sentry.properties
-      # - run: echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN_ADMIN" >> ./dashboard/.env.local
-      # - run: echo "SENTRY_SERVER_INIT_PATH=.next/server/sentry/initServerSDK.js" >> ./dashboard/.env.local
-      # - run: echo "defaults.url=$SENTRY_URL_ADMIN" >> ./dashboard/sentry.properties
-      # - run: echo "defaults.org=$SENTRY_ORG_ADMIN" >> ./dashboard/sentry.properties
-      # - run: echo "defaults.project=$SENTRY_PROJECT_ADMIN" >> ./dashboard/sentry.properties
-      # - run: echo "auth.token=$SENTRY_TOKEN_ADMIN" >> ./dashboard/sentry.properties
-      # - run: echo "cli.executable=$SENTRY_CLI_ADMIN" >> ./dashboard/sentry.properties
-      # # Client .env
-      # - run: touch ./client/.env.local ./client/sentry.properties
-      # - run: echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN_CLIENT" >> ./client/.env.local
-      # - run: echo "SENTRY_SERVER_INIT_PATH=.next/server/sentry/initServerSDK.js" >> ./client/.env.local
-      # - run: echo "defaults.url=$SENTRY_URL_CLIENT" >> ./client/sentry.properties
-      # - run: echo "defaults.org=$SENTRY_ORG_CLIENT" >> ./client/sentry.properties
-      # - run: echo "defaults.project=$SENTRY_PROJECT_CLIENT" >> ./client/sentry.properties
-      # - run: echo "auth.token=$SENTRY_TOKEN_CLIENT" >> ./client/sentry.properties
-      # - run: echo "cli.executable=$SENTRY_CLI_CLIENT" >> ./client/sentry.properties
-      # # Docker steps
-      # - run: docker kill $(docker ps -q)
-        run: docker system prune -a
-        run: docker-compose up -d
+        # Backend .env
+        # - run: touch ./backend/src/variables.env
+        # - run: echo "NODE_ENV=$NODE_ENV" >> ./backend/src/variables.env
+        # - run: echo "PORT=$PORT" >> ./backend/src/variables.env
+        # - run: echo "SECRET=$SECRET" >> ./backend/src/variables.env
+        # - run: echo "CLIENT_URL=$CLIENT_URL" >> ./backend/src/variables.env
+        # - run: echo "DASHBOARD_URL=$DASHBOARD_URL" >> ./backend/src/variables.env
+        # - run: echo "CLIENT_URL_WWW=$CLIENT_URL_WWW" >> ./backend/src/variables.env
+        # - run: echo "DASHBOARD_URL_WWW=$DASHBOARD_URL_WWW" >> ./backend/src/variables.env
+        # - run: echo "DATABASE=$DATABASE" >> ./backend/src/variables.env
+        # - run: echo "SENTRY_DSN=$SENTRY_DSN" >> ./backend/src/variables.env
+        # # Admin .env
+        # - run: touch ./dashboard/.env.local ./dashboard/sentry.properties
+        # - run: echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN_ADMIN" >> ./dashboard/.env.local
+        # - run: echo "SENTRY_SERVER_INIT_PATH=.next/server/sentry/initServerSDK.js" >> ./dashboard/.env.local
+        # - run: echo "defaults.url=$SENTRY_URL_ADMIN" >> ./dashboard/sentry.properties
+        # - run: echo "defaults.org=$SENTRY_ORG_ADMIN" >> ./dashboard/sentry.properties
+        # - run: echo "defaults.project=$SENTRY_PROJECT_ADMIN" >> ./dashboard/sentry.properties
+        # - run: echo "auth.token=$SENTRY_TOKEN_ADMIN" >> ./dashboard/sentry.properties
+        # - run: echo "cli.executable=$SENTRY_CLI_ADMIN" >> ./dashboard/sentry.properties
+        # # Client .env
+        # - run: touch ./client/.env.local ./client/sentry.properties
+        # - run: echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN_CLIENT" >> ./client/.env.local
+        # - run: echo "SENTRY_SERVER_INIT_PATH=.next/server/sentry/initServerSDK.js" >> ./client/.env.local
+        # - run: echo "defaults.url=$SENTRY_URL_CLIENT" >> ./client/sentry.properties
+        # - run: echo "defaults.org=$SENTRY_ORG_CLIENT" >> ./client/sentry.properties
+        # - run: echo "defaults.project=$SENTRY_PROJECT_CLIENT" >> ./client/sentry.properties
+        # - run: echo "auth.token=$SENTRY_TOKEN_CLIENT" >> ./client/sentry.properties
+        # - run: echo "cli.executable=$SENTRY_CLI_CLIENT" >> ./client/sentry.properties
+        # # Docker steps
+        # - run: docker kill $(docker ps -q)
+        run: |
+          docker system prune -a
+          docker-compose up -d
