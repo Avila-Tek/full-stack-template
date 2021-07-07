@@ -17,6 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@development
       - name: Build images
+        working-directory: docker/base
       # Backend .env
       # - run: touch ./backend/src/variables.env
       # - run: echo "NODE_ENV=$NODE_ENV" >> ./backend/src/variables.env
@@ -48,5 +49,5 @@ jobs:
       # - run: echo "cli.executable=$SENTRY_CLI_CLIENT" >> ./client/sentry.properties
       # # Docker steps
       # - run: docker kill $(docker ps -q)
-      - run: docker system prune -a
-      - run: docker-compose up -d
+        run: docker system prune -a
+        run: docker-compose up -d
