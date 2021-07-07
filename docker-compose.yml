@@ -36,8 +36,10 @@ services:
       - '3003:3000'
 
   swag:
-    image: ghcr.io/linuxserver/swag
-    container_name: swag
+    # image: ghcr.io/linuxserver/swag
+    # container_name: swag
+    image: linuxserver/letsencrypt
+    container_name: letsencryptnginx
     cap_add:
       - NET_ADMIN
     environment:
@@ -52,6 +54,6 @@ services:
     volumes:
       - ./nginx-config:/config/nginx/site-confs
     ports:
-      - 443:443
-      - 80:80
+      - '443:443'
+      - '80:80'
     restart: unless-stopped
