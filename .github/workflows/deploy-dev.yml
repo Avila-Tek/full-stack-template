@@ -73,6 +73,7 @@ jobs:
           docker-compose build --no-cache
 
   start-containers:
+    needs: build-containers
     name: 'Start Containers'
     environment: development
     runs-on: self-hosted
