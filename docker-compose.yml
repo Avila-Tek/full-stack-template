@@ -38,8 +38,6 @@ services:
   swag:
     image: ghcr.io/linuxserver/swag
     container_name: swag
-    # image: linuxserver/letsencrypt
-    # container_name: letsencryptnginx
     cap_add:
       - NET_ADMIN
     environment:
