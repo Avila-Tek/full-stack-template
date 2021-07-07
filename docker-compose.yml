@@ -52,7 +52,7 @@ services:
       - EMAIL=soporte@avilatek.dev
       - STAGING=false #optional
     volumes:
-      - ./nginx-config:/config/nginx/site-confs
+      - ./nginx-config:/config
     ports:
       - '443:443'
       - '80:80'
