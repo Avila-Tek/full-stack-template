@@ -50,5 +50,4 @@ jobs:
         # # Docker steps
         # - run: docker kill $(docker ps -q)
         run: |
-          docker system prune -a
           docker-compose up -d
