@@ -3,22 +3,20 @@ version: '3.9'
 services:
   api:
     build:
-      context: .
-      dockerfile: ./backend/Dockerfile
+      context: ./backend
     image: api
     container_name: at-api
-    env_file: ./backend/src/variables.env
+    env_file: ./src/variables.env
     network_mode: 'host'
     ports:
       - '3001:5555'
 
   admin:
     build:
-      context: .
-      dockerfile: ./dashboard/Dockerfile
+      context: ./dashboard
     image: admin
     container_name: at-admin
-    env_file: ./dashboard/.env.local
+    env_file: ./.env.local
     network_mode: 'host'
     depends_on:
       - 'api'
@@ -27,11 +25,10 @@ services:
 
   client:
     build:
-      context: .
-      dockerfile: ./client/Dockerfile
+      context: ./client
     image: client
     container_name: at-client
-    env_file: ./client/.env.local
+    env_file: ./.env.local
     network_mode: 'host'
     depends_on:
       - 'api'
