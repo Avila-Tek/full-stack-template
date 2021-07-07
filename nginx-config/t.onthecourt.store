@@ -40,3 +40,4 @@ server {
   server_name t.onthecourt.store www.t.onthecourt.store;
   return 404;
 }
+
