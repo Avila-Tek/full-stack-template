@@ -63,7 +63,7 @@ services:
       # - web-root:/var/www/html
     depends_on:
       - webserver
-    command: certonly --webroot --webroot-path=/var/www/html --email soporte@avilatek.dev --agree-tos --no-eff-email --staging -d t.onthecourt.store  -d www.t.onthecourt.store
+    command: certonly --email soporte@avilatek.dev --agree-tos --no-eff-email --staging -d t.onthecourt.store  -d www.t.onthecourt.store
 
 volumes:
   certbot-etc:

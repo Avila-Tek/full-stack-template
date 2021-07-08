@@ -70,7 +70,7 @@ jobs:
           echo "defaults.project=$SENTRY_PROJECT_CLIENT" >> ./client/sentry.properties
           echo "auth.token=$SENTRY_TOKEN_CLIENT" >> ./client/sentry.properties
           echo "cli.executable=$SENTRY_CLI_CLIENT" >> ./client/sentry.properties
-          docker-compose build --no-cache
+          # docker-compose build --no-cache
           docker-compose up -d
           # docker-compose build
 
