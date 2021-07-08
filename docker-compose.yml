@@ -43,7 +43,7 @@ services:
       - '80:80'
       - '443:443'
     volumes:
-      # - web-root:/var/www/html
+      - web-root:/var/www/html
       - ./nginx-conf:/etc/nginx/conf.d
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
@@ -60,20 +60,20 @@ services:
     volumes:
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
-      # - web-root:/var/www/html
+      - web-root:/var/www/html
     depends_on:
       - webserver
-    command: certonly --email soporte@avilatek.dev --agree-tos --no-eff-email --staging -d t.onthecourt.store  -d www.t.onthecourt.store
+    command: certonly --webroot --webroot-path=/var/www/html --email soporte@avilatek.dev --agree-tos --no-eff-email --staging -d t.onthecourt.store  -d www.t.onthecourt.store
 
 volumes:
   certbot-etc:
   certbot-var:
-  # web-root:
-  #   driver: local
-  #   driver_opts:
-  #     type: none
-  #     device: /home/sammy/node_project/views/
-  #     o: bind
+  web-root:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/avilatek/project
+      o: bind
 
 networks:
   app-network:
