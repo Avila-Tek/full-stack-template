@@ -8,8 +8,9 @@ services:
     container_name: api
     env_file: ./backend/src/variables.env
     restart: unless-stopped
-    ports:
-      - '3001:5555'
+    network_mode: 'host'
+    # ports:
+    #   - '3001:5555'
 
   admin:
     build:
@@ -20,8 +21,9 @@ services:
     depends_on:
       - 'api'
     restart: unless-stopped
-    ports:
-      - '3002:3000'
+    network_mode: 'host'
+    # ports:
+    #   - '3002:3000'
 
   client:
     build:
@@ -32,8 +34,9 @@ services:
     depends_on:
       - 'api'
     restart: unless-stopped
-    ports:
-      - '3003:3000'
+    network_mode: 'host'
+    # ports:
+    #   - '3003:3000'
 
   swag:
     image: ghcr.io/linuxserver/swag
@@ -56,7 +59,9 @@ services:
     volumes:
       - ./site-confs:/config/nginx/site-confs
       - ./proxy-confs:/config/nginx/proxy-confs
-    ports:
-      - '443:443'
-      - '80:80'
+    network_mode:
+      'host'
+      # ports:
+    #   - '443:443'
+    #   - '80:80'
     restart: unless-stopped
