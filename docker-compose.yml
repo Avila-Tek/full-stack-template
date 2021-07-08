@@ -35,74 +35,30 @@ services:
     networks:
       - app-network
 
-  webserver:
-    image: nginx:mainline-alpine
-    container_name: webserver
-    restart: unless-stopped
-    ports:
-      - '80:80'
-      - '443:443'
-    volumes:
-      - web-root:/var/www/html
-      - ./nginx-conf:/etc/nginx/conf.d
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
+  swag:
+    image: ghcr.io/linuxserver/swag
+    container_name: swag
     depends_on:
       - api
       - admin
       - client
-    networks:
-      - app-network
-
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Caracas
+      - URL=t.onthecourt.store
+      - SUBDOMAINS=www,
+        # admin,www.admin,api,www.api
+      - VALIDATION=http
+      - EMAIL=soporte@avilatek.dev
+      - STAGING=true #optional
     volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - web-root:/var/www/html
-    depends_on:
-      - webserver
-    command: certonly --webroot --webroot-path=/var/www/html --email soporte@avilatek.dev --agree-tos --no-eff-email --staging -d t.onthecourt.store  -d www.t.onthecourt.store
-
-volumes:
-  certbot-etc:
-  certbot-var:
-  web-root:
-    driver: local
-    driver_opts:
-      type: none
-      device: /home/avilatek/project
-      o: bind
+      - ./site-confs:/config/nginx/site-confs
+      - ./proxy-confs:/config/nginx/proxy-confs
+    restart: unless-stopped
 
 networks:
   app-network:
     driver: bridge
-
-  # swag:
-  #   image: ghcr.io/linuxserver/swag
-  #   container_name: swag
-  #   depends_on:
-  #     - api
-  #     - admin
-  #     - client
-  #   cap_add:
-  #     - NET_ADMIN
-  #   environment:
-  #     - PUID=1000
-  #     - PGID=1000
-  #     - TZ=America/Caracas
-  #     - URL=t.onthecourt.store
-  #     - SUBDOMAINS=www,admin,www.admin,api,www.api
-  #     - VALIDATION=http
-  #     - EMAIL=soporte@avilatek.dev
-  #     - STAGING=false #optional
-  #   volumes:
-  #     - ./site-confs:/config/nginx/site-confs
-  #     - ./proxy-confs:/config/nginx/proxy-confs
-  #   network_mode:
-  #     'host'
-  #     # ports:
-  #   #   - '443:443'
-  #   #   - '80:80'
-  #   restart: unless-stopped
