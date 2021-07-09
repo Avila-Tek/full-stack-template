@@ -58,6 +58,9 @@ services:
       - ./site-confs:/config/nginx/site-confs
       - ./proxy-confs:/config/nginx/proxy-confs
     restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
 
 networks:
   app-network:
