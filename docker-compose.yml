@@ -8,6 +8,7 @@ services:
     container_name: api
     env_file: ./backend/src/variables.env
     restart: unless-stopped
+    network_mode: 'host'
     networks:
       - app-network
 
@@ -20,6 +21,7 @@ services:
     depends_on:
       - 'api'
     restart: unless-stopped
+    network_mode: 'host'
     networks:
       - app-network
 
@@ -32,6 +34,7 @@ services:
     depends_on:
       - 'api'
     restart: unless-stopped
+    network_mode: 'host'
     networks:
       - app-network
 
@@ -57,10 +60,13 @@ services:
     volumes:
       - ./site-confs:/config/nginx/site-confs
       - ./proxy-confs:/config/nginx/proxy-confs
-    restart: unless-stopped
-    ports:
-      - '80:80'
-      - '443:443'
+    network_mode: 'host'
+    networks:
+      - app-network
+    network_mode: 'host'
+    # ports:
+    #   - '80:80'
+    #   - '443:443'
 
 networks:
   app-network:
