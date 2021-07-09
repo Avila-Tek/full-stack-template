@@ -10,9 +10,6 @@ services:
     restart: unless-stopped
     ports:
       - '3001:5555'
-    # network_mode: 'host'
-    # networks:
-    #   - app-network
 
   admin:
     build:
@@ -25,9 +22,6 @@ services:
     restart: unless-stopped
     ports:
       - '3002:3002'
-    # network_mode: 'host'
-    # networks:
-    #   - app-network
 
   client:
     build:
@@ -40,9 +34,6 @@ services:
     restart: unless-stopped
     ports:
       - '3003:3003'
-    # network_mode: 'host'
-    # networks:
-    #   - app-network
 
   swag:
     image: ghcr.io/linuxserver/swag
@@ -68,12 +59,3 @@ services:
     ports:
       - '80:80'
       - '443:443'
-    # network_mode: 'host'
-    # networks:
-    #   - app-network
-    # ports:
-    #   - '80:80'
-    #   - '443:443'
-# networks:
-#   app-network:
-#     driver: bridge
