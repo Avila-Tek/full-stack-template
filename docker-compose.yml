@@ -9,8 +9,8 @@ services:
     env_file: ./backend/src/variables.env
     restart: unless-stopped
     network_mode: 'host'
-    networks:
-      - app-network
+    # networks:
+    #   - app-network
 
   admin:
     build:
@@ -22,8 +22,8 @@ services:
       - 'api'
     restart: unless-stopped
     network_mode: 'host'
-    networks:
-      - app-network
+    # networks:
+    #   - app-network
 
   client:
     build:
@@ -35,8 +35,8 @@ services:
       - 'api'
     restart: unless-stopped
     network_mode: 'host'
-    networks:
-      - app-network
+    # networks:
+    #   - app-network
 
   swag:
     image: ghcr.io/linuxserver/swag
@@ -61,13 +61,11 @@ services:
       - ./site-confs:/config/nginx/site-confs
       - ./proxy-confs:/config/nginx/proxy-confs
     network_mode: 'host'
-    networks:
-      - app-network
-    network_mode: 'host'
+    # networks:
+    #   - app-network
     # ports:
     #   - '80:80'
     #   - '443:443'
-
-networks:
-  app-network:
-    driver: bridge
+# networks:
+#   app-network:
+#     driver: bridge
