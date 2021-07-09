@@ -49,11 +49,10 @@ services:
       - PGID=1000
       - TZ=America/Caracas
       - URL=t.onthecourt.store
-      - SUBDOMAINS=www,
-        # admin,www.admin,api,www.api
+      - SUBDOMAINS=www,admin,www.admin,api,www.api
       - VALIDATION=http
       - EMAIL=soporte@avilatek.dev
-      - STAGING=true #optional
+      - STAGING=false #optional
     volumes:
       - ./site-confs:/config/nginx/site-confs
     ports:
