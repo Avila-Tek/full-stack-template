@@ -59,13 +59,12 @@ services:
       - STAGING=true #optional
     volumes:
       - ./site-confs:/config/nginx/site-confs
-      - ./proxy-confs:/config/nginx/proxy-confs
     network_mode: 'host'
     # networks:
     #   - app-network
-    # ports:
-    #   - '80:80'
-    #   - '443:443'
+    ports:
+      - '80:80'
+      - '443:443'
 # networks:
 #   app-network:
 #     driver: bridge
