@@ -1,21 +1,22 @@
-/* eslint-disable import/prefer-default-export */
-/* eslint-disable class-methods-use-this */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-restricted-syntax */
+/* eslint-disable class-methods-use-this */
 import * as Sentry from '@sentry/node';
 import jwt from 'jsonwebtoken';
 import {
   ApolloServerPlugin,
   GraphQLRequestContext,
+  GraphQLRequestContextDidEncounterErrors,
   GraphQLRequestListener,
 } from 'apollo-server-plugin-base';
 
 export class SentryPlugin implements ApolloServerPlugin {
-  public requestDidStart(
+  requestDidStart(
     _requestContext: GraphQLRequestContext
-  ): GraphQLRequestListener | void {
-    return {
-      didEncounterErrors(ctx) {
+  ): Promise<GraphQLRequestListener | void> {
+    return Promise.resolve({
+      async didEncounterErrors(
+        ctx: GraphQLRequestContextDidEncounterErrors<any>
+      ): Promise<void> {
         if ((ctx as any)?.req?.cookies?.token) {
           const payload = jwt.decode(
             (ctx as any)?.req?.cookies?.token as string
@@ -48,6 +49,6 @@ export class SentryPlugin implements ApolloServerPlugin {
           }
         }
       },
-    };
+    });
   }
 }

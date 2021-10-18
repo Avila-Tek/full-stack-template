@@ -108,7 +108,7 @@ function DefaultColumnFilter({
   return <p />;
 }
 
-function fuzzyTextFilterFn(rows, id, filterValue) {
+function fuzzyTextFilterFn(rows: any[], id: any, filterValue: any): any[] {
   return matchSorter(rows, filterValue, {
     keys: [(row) => (row as any).values[id]],
   });
@@ -136,7 +136,7 @@ TableProps) {
       fuzzyText: fuzzyTextFilterFn,
       // Or, override the default text filter to use
       // "startWith"
-      text: (rows, id, filterValue) =>
+      text: (rows: any[], id: any, filterValue: any) =>
         rows.filter((row) => {
           const rowValue = row.values[id];
           return rowValue !== undefined
