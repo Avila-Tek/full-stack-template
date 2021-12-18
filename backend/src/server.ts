@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config({ path: './src/variables.env' });
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
-import mongoose from 'mongoose';
+import mongoose, { mongo } from 'mongoose';
 import { RewriteFrames } from '@sentry/integrations';
 import { ApolloServer } from 'apollo-server-express';
 import {
@@ -28,8 +28,9 @@ declare global {
 global.__rootdir__ = process.cwd() || __dirname;
 
 async function initSever() {
+  let connection: typeof mongoose | null = null;
   try {
-    const connection = await mongoose
+    connection = await mongoose
       .connect(String(process.env.DATABASE))
       .then((conn) => {
         console.log('Connected to database');
@@ -96,6 +97,9 @@ async function initSever() {
       }
     });
   } catch (err) {
+    if (connection) {
+      connection.connection.close();
+    }
     console.log(err);
     process.exit(1);
   }

@@ -5,7 +5,6 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import { UserDocument } from '../models/User';
 import formatMoney from './formatMoney';
-import splitIntoChuck from './batchArray';
 
 dayjs.locale('es');
 
