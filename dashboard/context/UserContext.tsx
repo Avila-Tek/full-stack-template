@@ -14,9 +14,8 @@ interface UserContextProviderProps {
 
 export function UserContextProvider({ children }: UserContextProviderProps) {
   const [user, setUser] = React.useState<User>(null);
+  const context = React.useMemo(() => ({ user, setUser }), [user, setUser]);
   return (
-    <UserContext.Provider value={{ user, setUser }}>
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={context}>{children}</UserContext.Provider>
   );
 }

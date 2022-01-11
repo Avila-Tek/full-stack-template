@@ -4,5 +4,6 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'react/jsx-props-no-spreading': 'off',
     'no-use-before-define': 'off',
+    'prefer-arrow-callback': 'off',
   },
 };

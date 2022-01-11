@@ -68,7 +68,7 @@ export default function Toast({
               {typeof children === 'string' ? (
                 <p className="text-sm">{children}</p>
               ) : (
-                <>{children}</>
+                children
               )}
             </div>
           </div>
@@ -125,7 +125,7 @@ export default function Toast({
               {typeof children === 'string' ? (
                 <p className="text-sm">{children}</p>
               ) : (
-                <>{children}</>
+                children
               )}
             </div>
           </div>
@@ -182,7 +182,7 @@ export default function Toast({
               {typeof children === 'string' ? (
                 <p className="text-sm">{children}</p>
               ) : (
-                <>{children}</>
+                children
               )}
             </div>
           </div>
@@ -239,7 +239,7 @@ export default function Toast({
               {typeof children === 'string' ? (
                 <p className="text-sm">{children}</p>
               ) : (
-                <>{children}</>
+                children
               )}
             </div>
           </div>

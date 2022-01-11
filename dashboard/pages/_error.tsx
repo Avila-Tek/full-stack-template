@@ -2,7 +2,7 @@ import NextErrorComponent from 'next/error';
 
 import * as Sentry from '@sentry/nextjs';
 
-const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
+function MyError({ statusCode, hasGetInitialPropsRun, err }) {
   if (!hasGetInitialPropsRun && err) {
     // getInitialProps is not called in case of
     // https://github.com/vercel/next.js/issues/8592. As a workaround, we pass
@@ -12,7 +12,7 @@ const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
   }
 
   return <NextErrorComponent statusCode={statusCode} />;
-};
+}
 
 MyError.getInitialProps = async ({ res, err, asPath }) => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

@@ -35,23 +35,21 @@ function GlobalFilter({
   }, 100);
 
   return (
-    <>
-      <div className="w-48 h-8 lg:ml-6 bg-neutral-200 rounded-full flex flex-row justify-center items-center pl-2">
-        <SearchIcon className="w-4 h-4" />
-        <input
-          className="appearance-none bg-transparent border-none w-full mr-3 py-1 px-2 focus:ring-0 focus:outline-none text-xs md:text-sm leading-normal text-black"
-          id="search"
-          name="search"
-          type="search"
-          value={value || ''}
-          onChange={(e) => {
-            setValue(e.target.value);
-            onChange(e.target.value);
-          }}
-          placeholder="Buscador"
-        />
-      </div>
-    </>
+    <div className="w-48 h-8 lg:ml-6 bg-neutral-200 rounded-full flex flex-row justify-center items-center pl-2">
+      <SearchIcon className="w-4 h-4" />
+      <input
+        className="appearance-none bg-transparent border-none w-full mr-3 py-1 px-2 focus:ring-0 focus:outline-none text-xs md:text-sm leading-normal text-black"
+        id="search"
+        name="search"
+        type="search"
+        value={value || ''}
+        onChange={(e) => {
+          setValue(e.target.value);
+          onChange(e.target.value);
+        }}
+        placeholder="Buscador"
+      />
+    </div>
   );
 }
 
