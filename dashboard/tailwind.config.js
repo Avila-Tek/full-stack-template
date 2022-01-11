@@ -1,16 +1,15 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable global-require */
 /* eslint-disable import/no-extraneous-dependencies */
 
+const colors = require('tailwindcss/colors');
+
 module.exports = {
-  purge: {
-    content: [
-      './pages/**/*.{js,jsx,ts,tsx}',
-      './components/**/*.{js,jsx,ts,tsx}',
-      './context/**/*.{js,jsx,ts,tsx}',
-    ],
-    // defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
-  },
-  darkMode: 'media', // 'media' or 'class'
+  content: [
+    './pages/**/*.{js,jsx,ts,tsx}',
+    './components/**/*.{js,jsx,ts,tsx}',
+    './context/**/*.{js,jsx,ts,tsx}',
+  ],
   theme: {
     screens: {
       sm: '640px',
@@ -20,6 +19,8 @@ module.exports = {
     },
     extend: {
       colors: {
+        green: colors.emerald,
+        gray: colors.neutral,
         primary: {
           100: '#787878',
           200: '#5E5E5E',
@@ -36,9 +37,6 @@ module.exports = {
         },
       },
     },
-  },
-  variants: {
-    extend: {},
   },
   plugins: [
     require('@tailwindcss/forms'),

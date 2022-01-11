@@ -33,27 +33,28 @@ export const ToastContext = React.createContext<IToastContext>({
 
 export function ToastContextProvider({ children }: ToastContextProvider) {
   const [alerts, setAlerts] = React.useState<TAlert[]>([]);
-  const notify = (
-    content = '',
-    type: 'success' | 'error' | 'warning' | 'info',
-    err?: Error
-  ) => {
-    if (err) {
-      Sentry.captureException(err);
-    }
-    const id = uuid();
-    setAlerts((_alerts) => [
-      ..._alerts,
-      {
-        content,
-        type,
-        id,
-        timeOut: setTimeout(() => {
-          setAlerts((__alerts) => __alerts.filter((alert) => alert.id !== id));
-        }, 6000),
-      },
-    ]);
-  };
+  const notify = React.useCallback(
+    (content, type: 'success' | 'error' | 'warning' | 'info', err?: Error) => {
+      if (err) {
+        Sentry.captureException(err);
+      }
+      const id = uuid();
+      setAlerts((_alerts) => [
+        ..._alerts,
+        {
+          content,
+          type,
+          id,
+          timeOut: setTimeout(() => {
+            setAlerts((__alerts) =>
+              __alerts.filter((alert) => alert.id !== id)
+            );
+          }, 6000),
+        },
+      ]);
+    },
+    []
+  );
   React.useEffect(() => () => {
     if (Array.isArray(alerts) && alerts.length > 0) {
       alerts?.forEach((alert) => clearTimeout(alert.timeOut));
@@ -64,43 +65,42 @@ export function ToastContextProvider({ children }: ToastContextProvider) {
     const { id } = e.currentTarget.dataset;
     setAlerts((_alerts) => _alerts.filter((alert) => alert.id !== id));
   };
+  const context = React.useMemo(() => ({ alerts, notify }), [alerts, notify]);
   return (
-    <ToastContext.Provider value={{ alerts, notify }}>
+    <ToastContext.Provider value={context}>
       <ClientOnlyPortal selector="#toast">
         {alerts?.length > 0 ? (
-          <>
-            <div
-              className="fixed py-4 px-4 md:px-0 w-full lg:w-1/4 right-0 top-10"
-              style={{
-                zIndex: 200,
-              }}
-            >
-              <AnimatePresence>
-                {alerts.map((alert) => (
-                  <motion.div
+          <div
+            className="fixed py-4 px-4 md:px-0 w-full lg:w-1/4 right-0 top-10"
+            style={{
+              zIndex: 200,
+            }}
+          >
+            <AnimatePresence>
+              {alerts.map((alert) => (
+                <motion.div
+                  key={alert.id}
+                  initial={{ opacity: 0, scale: 0.3 }}
+                  animate={{ opacity: 1, scale: 1.0 }}
+                  exit={{
+                    opacity: 0,
+                    scale: 0.5,
+                    transition: { duration: 0.2 },
+                  }}
+                  transition={{ type: 'spring', stiffness: 100 }}
+                >
+                  <Toast
                     key={alert.id}
-                    initial={{ opacity: 0, scale: 0.3 }}
-                    animate={{ opacity: 1, scale: 1.0 }}
-                    exit={{
-                      opacity: 0,
-                      scale: 0.5,
-                      transition: { duration: 0.2 },
-                    }}
-                    transition={{ type: 'spring', stiffness: 100 }}
+                    type={alert.type}
+                    id={alert.id}
+                    onDelete={onDelete}
                   >
-                    <Toast
-                      key={alert.id}
-                      type={alert.type}
-                      id={alert.id}
-                      onDelete={onDelete}
-                    >
-                      {alert.content}
-                    </Toast>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
-          </>
+                    {alert.content}
+                  </Toast>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
         ) : null}
       </ClientOnlyPortal>
       {children}
