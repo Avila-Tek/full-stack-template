@@ -8,6 +8,7 @@ import {
   useAsyncDebounce,
   Row,
   useFilters,
+  Column,
 } from 'react-table';
 import { useRouter } from 'next/router';
 import { matchSorter } from 'match-sorter';
@@ -53,16 +54,8 @@ function GlobalFilter({
   );
 }
 
-interface IHeader {
-  Header: React.ReactNode;
-  accessor: string;
-  filterColumn?: boolean;
-  disableFilters?: boolean;
-  disableSortBy?: boolean;
-}
-
 interface TableProps {
-  headers: Array<IHeader>;
+  headers: Array<Column<Record<string, any>>>;
   content: Array<Record<string, any>>;
   noFilter?: boolean;
   type?: string;
@@ -113,8 +106,8 @@ function fuzzyTextFilterFn(rows: any[], id: any, filterValue: any): any[] {
 }
 
 export default function Table({
-  headers,
-  content,
+  headers: columns,
+  content: data,
   noFilter,
   type,
   title,
@@ -123,8 +116,6 @@ export default function Table({
 }: //   updateAllies,
 TableProps) {
   const router = useRouter();
-  const columns = React.useMemo(() => [...headers], [headers]);
-  const data = React.useMemo(() => [...content], [content]);
   const [rowCount, setRowCount] = React.useState(5);
   const [activated, setActivated] = React.useState(false);
 
@@ -187,64 +178,6 @@ TableProps) {
     useSortBy,
     usePagination
   );
-
-  const changePage = (url: string) => {
-    router.push(url);
-  };
-
-  //   const exportExcel = (filename: string, sheet: string) => (
-  //     <ReactHTMLTableToExcel
-  //       id="exportExcelButton"
-  //       className="bebas w-48 h-8 bg-primary-500 hover:bg-blue-500 text-white text-xs md:text-sm leading-normal rounded-full uppercase ml-4"
-  //       table="infoTable"
-  //       filename={filename}
-  //       sheet={sheet}
-  //       buttonText="Exportar Excel"
-  //     />
-  //   );
-
-  //   const generateButton = (_type) => {
-  //     if (_type === 'payment') {
-  //       return exportExcel('Historial-de-pagos', 'Historial de Pagos');
-  //     }
-  //     if (_type === 'ally') {
-  //       return <CreateAllyButton allies={content} updateAllies={updateAllies} />;
-  //     }
-  //     if (_type === 'client') {
-  //       return exportExcel('Clientes', 'Tabla de clientes');
-  //     }
-  //     if (_type === 'product') {
-  //       return <CreateProductButton />;
-  //     }
-  //     if (_type === 'roles-privileges') {
-  //       return <CreateRoleButton users={content} updateUsers={updateAllies} />;
-  //     }
-  //     if (_type === 'subscription') {
-  //       return <CreateSubscriptionButton />;
-  //     }
-  //     return '';
-  //   };
-
-  const onClickTable = (index: number) => {
-    if (type === 'payment') {
-      router.push(`/payments/${content[index].id}`);
-    }
-    if (type === 'product') {
-      router.push(`/products/${content[index]?.id}`);
-    }
-    if (type === 'order') {
-      router.push(`/orders/${content[index]?.id}`);
-    }
-    if (type === 'roles-privileges') {
-      router.push(`/app/users/${content[index]?.id}`);
-    }
-    if (type === 'client') {
-      router.push(`/app/clients/${content[index]?.id}`);
-    }
-    if (type === 'user') {
-      router.push(`/users/${content[index]?.id}`);
-    }
-  };
 
   return (
     <div className="flex flex-col items-center h-auto w-full">
@@ -324,19 +257,15 @@ TableProps) {
                 prepareRow(row);
                 return (
                   <tr
+                    {...row.getRowProps()}
                     className={`${
                       type === 'product' ? 'h-max' : 'h-14'
                     } bg-transparent bebas text-sm leading-normal justify-between text-neutral-800 hover:bg-neutral-200 w-full border-b border-neutral-300 font-normal cursor-pointer`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      onClickTable(Number(row.id));
-                    }}
-                    {...row.getRowProps()}
                   >
                     {row.cells.map((cell) => (
                       <td
-                        className="truncate px-2 md:px-3 h-8 md:h-12"
                         {...cell.getCellProps()}
+                        className="truncate px-2 md:px-3 h-8 md:h-12"
                       >
                         <div className="flex flex-row justify-center items-center">
                           <div
@@ -347,18 +276,6 @@ TableProps) {
                             }
                           >
                             {cell.render('Cell')}
-                          </div>
-
-                          <div>
-                            {/* {header.canFilter ? (
-                              activated ? (
-                                header?.render('Filter')
-                              ) : (
-                                <div className="ml-1">
-                                  <BsArrowDown />
-                                </div>
-                              )
-                            ) : null} */}
                           </div>
                         </div>
                       </td>

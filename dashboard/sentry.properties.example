@@ -1,5 +1,4 @@
-defaults.url=
-defaults.org=
+defaults.url=https://sentry.io/
+defaults.org=avilatek
 defaults.project=
-auth.token=
 cli.executable=

@@ -1,60 +1,84 @@
-version: '3.9'
+version: '2'
 
 services:
-  api:
+  api-dev:
     build:
       context: ./backend
-    image: api
-    container_name: api
+    image: api-dev
+    container_name: api-dev
     env_file: ./backend/src/variables.env
     restart: unless-stopped
     ports:
       - '3001:3001'
+    mem_limit: 2g
+    memswap_limit: -1
+    mem_swappiness: 20
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.api-dev.rule=Host(`api.css-aes.avilatek.com`)'
+      - 'traefik.port=3004'
+      - 'traefik.http.routers.api-dev.entrypoints=websecure'
+      - 'traefik.http.routers.api-dev.tls.certresolver=api-dev'
 
-  admin:
+  admin-dev:
     build:
       context: ./dashboard
-    image: admin
-    container_name: admin
+    image: admin-dev
+    container_name: admin-dev
     env_file: ./dashboard/.env.local
     depends_on:
-      - 'api'
+      - 'api-dev'
     restart: unless-stopped
     ports:
       - '3002:3002'
+    mem_limit: 2g
+    memswap_limit: -1
+    mem_swappiness: 20
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.admin-dev.rule=Host(`admin.css-aes.avilatek.com`)'
+      - 'traefik.port=3004'
+      - 'traefik.http.routers.admin-dev.entrypoints=websecure'
+      - 'traefik.http.routers.admin-dev.tls.certresolver=admin-dev'
 
-  client:
+  client-dev:
     build:
       context: ./client
-    image: client
-    container_name: client
+    image: client-dev
+    container_name: client-dev
     env_file: ./client/.env.local
     depends_on:
-      - 'api'
+      - 'api-dev'
     restart: unless-stopped
     ports:
       - '3003:3003'
+    mem_limit: 2g
+    memswap_limit: -1
+    mem_swappiness: 20
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.client-dev.rule=Host(`css-aes.avilatek.com`)'
+      - 'traefik.port=3004'
+      - 'traefik.http.routers.client-dev.entrypoints=websecure'
+      - 'traefik.http.routers.client-dev.tls.certresolver=client-dev'
 
-  swag:
-    image: ghcr.io/linuxserver/swag
-    container_name: swag
-    depends_on:
-      - api
-      - admin
-      - client
-    cap_add:
-      - NET_ADMIN
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Caracas
-      - URL=t.onthecourt.store
-      - SUBDOMAINS=www,admin,www.admin,api,www.api
-      - VALIDATION=http
-      - EMAIL=soporte@avilatek.dev
-      - STAGING=false #optional
-    volumes:
-      - ./site-confs:/config/nginx/site-confs
+  traefik:
+    image: 'traefik:v2.8'
+    container_name: 'traefik'
+    command:
+      - '--log.level=DEBUG'
+      - '--api.insecure=true'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=true'
+      - '--entrypoints.web.address=:80'
+      - '--entrypoints.websecure.address=:443'
+      - '--certificatesresolvers.affiliations.acme.tlschallenge=true'
+      - '--certificatesresolvers.affiliations.acme.email=soporte@avilatek.dev'
+      - '--certificatesresolvers.affiliations.acme.storage=/letsencrypt/acme.json'
+    restart: unless-stopped
     ports:
       - '80:80'
       - '443:443'
+      - '8080:8080'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'

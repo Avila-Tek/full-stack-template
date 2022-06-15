@@ -1,4 +1,4 @@
-name: Deploy to Digital Ocean Droplet [dev]
+name: Deploy to Development
 
 on:
   push:
@@ -8,8 +8,8 @@ on:
 jobs:
   build-containers:
     name: 'Build Containers'
-    environment: development
-    runs-on: self-hosted
+    environment: Development
+    runs-on: ['self-hosted', 'dev']
 
     defaults:
       run:
@@ -23,120 +23,59 @@ jobs:
         working-directory: ./
         env:
           NODE_ENV: ${{ secrets.NODE_ENV }}
-          PORT: ${{ secrets.PORT }}
+          PORT: ${{ secrets.PORT_DEV }}
           SECRET: ${{ secrets.SECRET }}
-          CLIENT_URL: ${{ secrets.CLIENT_URL }}
-          DASHBOARD_URL: ${{ secrets.DASHBOARD_URL }}
-          CLIENT_URL_WWW: ${{ secrets.CLIENT_URL_WWW }}
-          DASHBOARD_URL_WWW: ${{ secrets.DASHBOARD_URL_WWW }}
-          DATABASE: ${{ secrets.DATABASE }}
+          CORS_ORIGIN: ${{ secrets.CORS_ORIGIN_DEV }}
+          CLIENT_URL: ${{ secrets.CLIENT_URL_DEV }}
+          DASHBOARD_URL: ${{ secrets.DASHBOARD_URL_DEV }}
+          DATABASE: ${{ secrets.DATABASE_DEV }}
+          POSTMARK_API_KEY: ${{ secrets.POSTMARK_API_KEY }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          NEXT_PUBLIC_SENTRY_DSN_ADMIN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN_ADMIN }}
-          SENTRY_URL_ADMIN: ${{ secrets.SENTRY_URL_ADMIN }}
-          SENTRY_ORG_ADMIN: ${{ secrets.SENTRY_ORG_ADMIN }}
+          SENTRY_URL: ${{ secrets.SENTRY_URL }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN }}
           SENTRY_PROJECT_ADMIN: ${{ secrets.SENTRY_PROJECT_ADMIN }}
-          SENTRY_TOKEN_ADMIN: ${{ secrets.SENTRY_TOKEN_ADMIN }}
-          SENTRY_CLI_ADMIN: ${{ secrets.SENTRY_CLI_ADMIN }}
-          NEXT_PUBLIC_SENTRY_DSN_CLIENT: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN_CLIENT }}
-          SENTRY_URL_CLIENT: ${{ secrets.SENTRY_URL_CLIENT }}
-          SENTRY_ORG_CLIENT: ${{ secrets.SENTRY_ORG_CLIENT }}
           SENTRY_PROJECT_CLIENT: ${{ secrets.SENTRY_PROJECT_CLIENT }}
-          SENTRY_TOKEN_CLIENT: ${{ secrets.SENTRY_TOKEN_CLIENT }}
-          SENTRY_CLI_CLIENT: ${{ secrets.SENTRY_CLI_CLIENT }}
+          NEXT_PUBLIC_SENTRY_DSN_ADMIN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN_ADMIN }}
+          NEXT_PUBLIC_SENTRY_DSN_CLIENT: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN_CLIENT }}
         run: |
-          touch ./backend/src/variables.env
-          touch ./dashboard/.env.local ./dashboard/sentry.properties
-          touch ./client/.env.local ./client/sentry.properties
+          touch ./.env ./backend/src/variables.env ./dashboard/.env.local ./dashboard/sentry.properties ./client/.env.local ./client/sentry.properties
+          # SENTRY
+          echo "NEXT_PUBLIC_SENTRY_DSN_CLIENT=$NEXT_PUBLIC_SENTRY_DSN_CLIENT" >> ./.env
+          echo "SENTRY_URL_CLIENT=$SENTRY_URL" >> ./.env
+          echo "SENTRY_ORG_CLIENT=$SENTRY_ORG" >> ./.env
+          echo "SENTRY_TOKEN_CLIENT=$SENTRY_TOKEN" >> ./.env
+          echo "SENTRY_PROJECT_CLIENT=$SENTRY_PROJECT_CLIENT" >> ./.env
+          echo "NEXT_PUBLIC_SENTRY_DSN_ADMIN=$NEXT_PUBLIC_SENTRY_DSN_ADMIN" >> ./.env
+          echo "SENTRY_URL_ADMIN=$SENTRY_URL" >> ./.env
+          echo "SENTRY_ORG_ADMIN=$SENTRY_ORG" >> ./.env
+          echo "SENTRY_TOKEN_ADMIN=$SENTRY_TOKEN" >> ./.env
+          echo "SENTRY_PROJECT_ADMIN=$SENTRY_PROJECT_ADMIN" >> ./.env
+          # BACKEND
           echo "NODE_ENV=$NODE_ENV" >> ./backend/src/variables.env
           echo "PORT=$PORT" >> ./backend/src/variables.env
           echo "SECRET=$SECRET" >> ./backend/src/variables.env
+          echo "CORS_ORIGIN=$CORS_ORIGIN" >> ./backend/src/variables.env
           echo "CLIENT_URL=$CLIENT_URL" >> ./backend/src/variables.env
           echo "DASHBOARD_URL=$DASHBOARD_URL" >> ./backend/src/variables.env
-          echo "CLIENT_URL_WWW=$CLIENT_URL_WWW" >> ./backend/src/variables.env
-          echo "DASHBOARD_URL_WWW=$DASHBOARD_URL_WWW" >> ./backend/src/variables.env
           echo "DATABASE=$DATABASE" >> ./backend/src/variables.env
-          echo "SENTRY_DSN=$SENTRY_DSN" >> ./backend/src/variables.env
+          echo "POSTMARK_API_KEY=$POSTMARK_API_KEY" >> ./backend/src/variables.env
+          # ADMIN
           echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN_ADMIN" >> ./dashboard/.env.local
           echo "SENTRY_SERVER_INIT_PATH=.next/server/sentry/initServerSDK.js" >> ./dashboard/.env.local
-          echo "defaults.url=$SENTRY_URL_ADMIN" >> ./dashboard/sentry.properties
-          echo "defaults.org=$SENTRY_ORG_ADMIN" >> ./dashboard/sentry.properties
-          echo "defaults.project=$SENTRY_PROJECT_ADMIN" >> ./dashboard/sentry.properties
-          echo "auth.token=$SENTRY_TOKEN_ADMIN" >> ./dashboard/sentry.properties
-          echo "cli.executable=$SENTRY_CLI_ADMIN" >> ./dashboard/sentry.properties
+          # CLIENT
           echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN_CLIENT" >> ./client/.env.local
           echo "SENTRY_SERVER_INIT_PATH=.next/server/sentry/initServerSDK.js" >> ./client/.env.local
-          echo "defaults.url=$SENTRY_URL_CLIENT" >> ./client/sentry.properties
-          echo "defaults.org=$SENTRY_ORG_CLIENT" >> ./client/sentry.properties
-          echo "defaults.project=$SENTRY_PROJECT_CLIENT" >> ./client/sentry.properties
-          echo "auth.token=$SENTRY_TOKEN_CLIENT" >> ./client/sentry.properties
-          echo "cli.executable=$SENTRY_CLI_CLIENT" >> ./client/sentry.properties
-          docker-compose up --build --force-recreate -d
-
-  # start-containers:
-  #   needs: build-containers
-  #   name: 'Start Containers'
-  #   environment: development
-  #   runs-on: self-hosted
-
-  #   defaults:
-  #     run:
-  #       working-directory: .
-
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-
-  #     - name: Start images
-  #       working-directory: ./
-  #       env:
-  #         NODE_ENV: ${{ secrets.NODE_ENV }}
-  #         PORT: ${{ secrets.PORT }}
-  #         SECRET: ${{ secrets.SECRET }}
-  #         CLIENT_URL: ${{ secrets.CLIENT_URL }}
-  #         DASHBOARD_URL: ${{ secrets.DASHBOARD_URL }}
-  #         CLIENT_URL_WWW: ${{ secrets.CLIENT_URL_WWW }}
-  #         DASHBOARD_URL_WWW: ${{ secrets.DASHBOARD_URL_WWW }}
-  #         DATABASE: ${{ secrets.DATABASE }}
-  #         SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-  #         NEXT_PUBLIC_SENTRY_DSN_ADMIN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN_ADMIN }}
-  #         SENTRY_URL_ADMIN: ${{ secrets.SENTRY_URL_ADMIN }}
-  #         SENTRY_ORG_ADMIN: ${{ secrets.SENTRY_ORG_ADMIN }}
-  #         SENTRY_PROJECT_ADMIN: ${{ secrets.SENTRY_PROJECT_ADMIN }}
-  #         SENTRY_TOKEN_ADMIN: ${{ secrets.SENTRY_TOKEN_ADMIN }}
-  #         SENTRY_CLI_ADMIN: ${{ secrets.SENTRY_CLI_ADMIN }}
-  #         NEXT_PUBLIC_SENTRY_DSN_CLIENT: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN_CLIENT }}
-  #         SENTRY_URL_CLIENT: ${{ secrets.SENTRY_URL_CLIENT }}
-  #         SENTRY_ORG_CLIENT: ${{ secrets.SENTRY_ORG_CLIENT }}
-  #         SENTRY_PROJECT_CLIENT: ${{ secrets.SENTRY_PROJECT_CLIENT }}
-  #         SENTRY_TOKEN_CLIENT: ${{ secrets.SENTRY_TOKEN_CLIENT }}
-  #         SENTRY_CLI_CLIENT: ${{ secrets.SENTRY_CLI_CLIENT }}
-  #       run: |
-  #         touch ./backend/src/variables.env
-  #         touch ./dashboard/.env.local ./dashboard/sentry.properties
-  #         touch ./client/.env.local ./client/sentry.properties
-  #         echo "NODE_ENV=$NODE_ENV" >> ./backend/src/variables.env
-  #         echo "PORT=$PORT" >> ./backend/src/variables.env
-  #         echo "SECRET=$SECRET" >> ./backend/src/variables.env
-  #         echo "CLIENT_URL=$CLIENT_URL" >> ./backend/src/variables.env
-  #         echo "DASHBOARD_URL=$DASHBOARD_URL" >> ./backend/src/variables.env
-  #         echo "CLIENT_URL_WWW=$CLIENT_URL_WWW" >> ./backend/src/variables.env
-  #         echo "DASHBOARD_URL_WWW=$DASHBOARD_URL_WWW" >> ./backend/src/variables.env
-  #         echo "DATABASE=$DATABASE" >> ./backend/src/variables.env
-  #         echo "SENTRY_DSN=$SENTRY_DSN" >> ./backend/src/variables.env
-  #         echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN_ADMIN" >> ./dashboard/.env.local
-  #         echo "SENTRY_SERVER_INIT_PATH=.next/server/sentry/initServerSDK.js" >> ./dashboard/.env.local
-  #         echo "defaults.url=$SENTRY_URL_ADMIN" >> ./dashboard/sentry.properties
-  #         echo "defaults.org=$SENTRY_ORG_ADMIN" >> ./dashboard/sentry.properties
-  #         echo "defaults.project=$SENTRY_PROJECT_ADMIN" >> ./dashboard/sentry.properties
-  #         echo "auth.token=$SENTRY_TOKEN_ADMIN" >> ./dashboard/sentry.properties
-  #         echo "cli.executable=$SENTRY_CLI_ADMIN" >> ./dashboard/sentry.properties
-  #         echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN_CLIENT" >> ./client/.env.local
-  #         echo "SENTRY_SERVER_INIT_PATH=.next/server/sentry/initServerSDK.js" >> ./client/.env.local
-  #         echo "defaults.url=$SENTRY_URL_CLIENT" >> ./client/sentry.properties
-  #         echo "defaults.org=$SENTRY_ORG_CLIENT" >> ./client/sentry.properties
-  #         echo "defaults.project=$SENTRY_PROJECT_CLIENT" >> ./client/sentry.properties
-  #         echo "auth.token=$SENTRY_TOKEN_CLIENT" >> ./client/sentry.properties
-  #         echo "cli.executable=$SENTRY_CLI_CLIENT" >> ./client/sentry.properties
-  #         docker kill $(docker ps -q)
-  #         docker-compose up -d
-  #         docker system prune -f
+          # DOCKER
+          docker compose up --build --force-recreate -d
+          docker system prune -f
+          curl --location --request POST 'https://avila-mail.vercel.app/api/send-email' \
+          --header 'Content-Type: application/json' \
+          --data-raw "{
+              \"template\": \"deploy\",
+              \"name\": \"Template (development)\",
+              \"GITHUB_REPOSITORY\": \"$GITHUB_REPOSITORY\",
+              \"GITHUB_SHA\": \"$GITHUB_SHA\",
+              \"CORS_ORIGINS\": [\"$CLIENT_URL\", \"$DASHBOARD_URL\"],
+              \"ACTION\": \"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\"
+          }"
