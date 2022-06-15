@@ -41,7 +41,7 @@ export class SentryPlugin implements ApolloServerPlugin {
                 scope.addBreadcrumb({
                   category: 'query-path',
                   message: err.path.join(' > '),
-                  level: Sentry.Severity.Debug,
+                  // level: Sentry.Severity.Debug,
                 });
               }
               Sentry.captureException(err);

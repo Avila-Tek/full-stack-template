@@ -1,8 +1,9 @@
-import { UserTC } from '../models';
+import { authMutations } from '../components/auth';
+import { userMutations } from '../components/user';
 
 const Mutation = {
-  createUser: UserTC.mongooseResolvers.createOne(),
-  updateUser: UserTC.mongooseResolvers.updateOne(),
+  ...authMutations,
+  ...userMutations,
 };
 
 export default Mutation;

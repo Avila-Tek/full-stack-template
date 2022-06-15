@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config({ path: './src/variables.env' });
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import { RewriteFrames } from '@sentry/integrations';
 import { ApolloServer } from 'apollo-server-express';
 import {
@@ -62,12 +62,7 @@ async function initSever() {
       app,
       cors: {
         credentials: true,
-        origin: [
-          process.env.CLIENT_URL,
-          process.env.DASHBOARD_URL,
-          process.env.CLIENT_URL_WWW,
-          process.env.DASHBOARD_URL_WWW,
-        ],
+        origin: JSON.parse(process.env?.CORS_ORIGINS ?? '[]'),
       },
     });
 

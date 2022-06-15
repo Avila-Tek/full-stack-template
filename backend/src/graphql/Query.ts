@@ -1,8 +1,9 @@
-import { UserTC } from '../models';
+import { authQueries } from '../components/auth';
+import { userQueries } from '../components/user';
 
 const Query = {
-  user: UserTC.mongooseResolvers.findOne(),
-  users: UserTC.mongooseResolvers.findMany(),
+  ...authQueries,
+  ...userQueries,
 };
 
 export default Query;

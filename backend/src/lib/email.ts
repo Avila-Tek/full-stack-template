@@ -3,8 +3,7 @@
 import * as postmark from 'postmark';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
-import { UserDocument } from '../models/User';
-import formatMoney from './formatMoney';
+import { IUser } from '../components/user';
 
 dayjs.locale('es');
 
@@ -20,7 +19,7 @@ const fromEmail = process.env.SENDER_EMAIL;
 
 // const client = new postmark.ServerClient(process.env.POSTMARK_API_KEY);
 
-export async function sendWelcomeEmail(user: UserDocument) {
+export async function sendWelcomeEmail(user: IUser) {
   const emailOptions = {
     From: `Plataforma Unidos <${fromEmail}>`,
     To: `${user?.email}`,
@@ -31,7 +30,7 @@ export async function sendWelcomeEmail(user: UserDocument) {
 }
 
 interface ResetPasswordOptions {
-  user: UserDocument;
+  user: IUser;
   os: BrowserDetectInfo;
   url: string;
 }

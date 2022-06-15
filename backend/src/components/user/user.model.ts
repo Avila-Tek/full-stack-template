@@ -1,9 +1,10 @@
-import { Schema, Document, model, Types } from 'mongoose';
+import { Schema, Document, model } from 'mongoose';
 import { composeMongoose } from 'graphql-compose-mongoose';
 import slugs from 'slugs';
 import bcrypt from 'bcryptjs';
 
-export interface UserDocument extends Document {
+export interface IUser {
+  _id?: any;
   slug?: string;
   firstName: string;
   lastName: string;
@@ -20,7 +21,9 @@ export interface UserDocument extends Document {
   updatedAt?: Date;
 }
 
-const userSchema = new Schema(
+export type UserDocument = Document & IUser;
+
+const userSchema = new Schema<IUser>(
   {
     slug: {
       type: String,
@@ -69,7 +72,7 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-userSchema.pre('save', async function (this: UserDocument, next) {
+userSchema.pre('save', async function (next) {
   if (!this.isModified('firstName') || !this.isModified('lastName')) {
     return next();
   }
@@ -84,7 +87,7 @@ userSchema.pre('save', async function (this: UserDocument, next) {
   next();
 });
 
-userSchema.pre('save', async function (this: UserDocument, next) {
+userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
   }
@@ -93,4 +96,5 @@ userSchema.pre('save', async function (this: UserDocument, next) {
 });
 
 export const User = model<UserDocument>('User', userSchema);
+
 export const UserTC = composeMongoose(User);
