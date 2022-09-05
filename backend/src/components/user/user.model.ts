@@ -1,4 +1,4 @@
-import { Schema, Document, model } from 'mongoose';
+import { Schema, Document, model, Types } from 'mongoose';
 import { composeMongoose } from 'graphql-compose-mongoose';
 import slugs from 'slugs';
 import bcrypt from 'bcryptjs';
@@ -21,7 +21,7 @@ export interface IUser {
   updatedAt?: Date;
 }
 
-export type UserDocument = Document & IUser;
+export type UserDocument = Document<Types.ObjectId, any, IUser> & IUser;
 
 const userSchema = new Schema<IUser>(
   {

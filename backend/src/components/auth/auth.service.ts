@@ -1,7 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import browser from 'browser-detect';
-import { schemaComposer } from 'graphql-compose';
 import { v4 as uuid } from 'uuid';
 import { NoSentryError } from '../../lib/NoSentryError';
 import { sendResetPasswordEmail } from '../../lib/email';

@@ -37,7 +37,10 @@ const signIn = schemaComposer.createResolver<
   async resolve({ args, context }) {
     const { user, token } = await authService.signIn(args.data);
     context.res.cookie('token', token, cookieConfig);
-    return user;
+    return {
+      user,
+      token,
+    };
   },
 });
 
