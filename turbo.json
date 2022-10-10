@@ -1,0 +1,44 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "pipeline": {
+    "clean": {
+      "outputs": []
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**"]
+    },
+    "admin#build": {
+      "dependsOn": ["^build", "@avila-tek/ui#build"],
+      "outputs": [".next/**"],
+      "env": [
+        "NEXT_PUBLIC_GOOGLE_MAPS_KEY",
+        "NEXT_PUBLIC_ALGOLIA_APP_ID",
+        "NEXT_PUBLIC_ALGOLIA_PUBLIC_KEY",
+        "NEXT_PUBLIC_SENTRY_DSN",
+        "NEXT_PUBLIC_TINY_KEY"
+      ]
+    },
+    "client#build": {
+      "dependsOn": ["^build", "@avila-tek/ui#build"],
+      "outputs": [".next/**"],
+      "env": [
+        "NEXT_PUBLIC_GOOGLE_MAPS_KEY",
+        "NEXT_PUBLIC_ALGOLIA_APP_ID",
+        "NEXT_PUBLIC_ALGOLIA_PUBLIC_KEY",
+        "NEXT_PUBLIC_SENTRY_DSN",
+        "NEXT_PUBLIC_TINY_KEY"
+      ]
+    },
+    "api#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "lint": {
+      "outputs": []
+    },
+    "dev": {
+      "cache": false
+    }
+  }
+}

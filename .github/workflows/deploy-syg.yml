@@ -1,15 +1,15 @@
-name: Deploy to Development
+name: Deploy to Staging
 
 on:
   push:
     branches:
-      - development
+      - staging
 
 jobs:
   build-containers:
     name: 'Build Containers'
-    environment: development
-    runs-on: ['self-hosted', 'development']
+    environment: staging
+    runs-on: ['self-hosted', 'staging']
 
     defaults:
       run:
@@ -22,25 +22,25 @@ jobs:
       - name: Build images
         working-directory: ./
         env:
-          NODE_ENV: ${{ secrets.NODE_ENV_DEV }}
-          PORT: ${{ secrets.PORT_DEV }}
-          DATABASE: ${{ secrets.DATABASE_DEV }}
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN_DEV }}
-          ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID_DEV }}
-          ALGOLIA_PUBLIC_KEY: ${{ secrets.ALGOLIA_PUBLIC_KEY_DEV }}
-          ALGOLIA_PRIVATE_KEY: ${{ secrets.ALGOLIA_PRIVATE_KEY_DEV }}
-          SECRET: ${{ secrets.SECRET_DEV }}
-          CORS_ORIGINS: ${{ secrets.CORS_ORIGINS_DEV }}
-          CLIENT_URL: ${{ secrets.CLIENT_URL_DEV }}
-          DASHBOARD_URL: ${{ secrets.DASHBOARD_URL_DEV }}
+          NODE_ENV: ${{ secrets.NODE_ENV_STG }}
+          PORT: ${{ secrets.PORT_STG }}
+          DATABASE: ${{ secrets.DATABASE_STG }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN_STG }}
+          ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID_STG }}
+          ALGOLIA_PUBLIC_KEY: ${{ secrets.ALGOLIA_PUBLIC_KEY_STG }}
+          ALGOLIA_PRIVATE_KEY: ${{ secrets.ALGOLIA_PRIVATE_KEY_STG }}
+          SECRET: ${{ secrets.SECRET_STG }}
+          CORS_ORIGINS: ${{ secrets.CORS_ORIGINS_STG }}
+          CLIENT_URL: ${{ secrets.CLIENT_URL_STG }}
+          DASHBOARD_URL: ${{ secrets.DASHBOARD_URL_STG }}
           POSTMARK_API_KEY: ${{ secrets.POSTMARK_API_KEY }}
           SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
           AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          INTERCONECTADOS_USER: ${{ secrets.INTERCONECTADOS_USER_DEV }}
-          INTERCONECTADOS_PASSWORD: ${{ secrets.INTERCONECTADOS_PASSWORD_DEV }}
+          INTERCONECTADOS_USER: ${{ secrets.INTERCONECTADOS_USER_STG }}
+          INTERCONECTADOS_PASSWORD: ${{ secrets.INTERCONECTADOS_PASSWORD_STG }}
           NEXT_PUBLIC_GOOGLE_MAPS_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_KEY }}
           NEXT_PUBLIC_TINY_KEY: ${{ secrets.NEXT_PUBLIC_TINY_KEY }}
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
@@ -105,7 +105,7 @@ jobs:
           --header 'Content-Type: application/json' \
           --data-raw "{
               \"template\": \"deploy\",
-              \"name\": \"NuevoProyecto (desarrollo)\",
+              \"name\": \"NuevoProyecto (staging)\",
               \"GITHUB_REPOSITORY\": \"$GITHUB_REPOSITORY\",
               \"GITHUB_SHA\": \"$GITHUB_SHA\",
               \"CORS_ORIGINS\": [\"$CLIENT_URL\", \"$DASHBOARD_URL\"],

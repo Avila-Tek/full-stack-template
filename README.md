@@ -1,68 +1,73 @@
-# Avila Tek Next.js Template
+# Turborepo starter
 
-![Avila Tek Logo](https://avilatek.dev/assets/images/logo_white.png)
+This is an official npm starter turborepo.
 
-Este repositorio es una plantilla para los proyectos Full Stack desarrollados por Avila Tek, esta configurado para clonarlo, instalar las dependencias y empezar a trabajar, en caso de que estes buscando un template para un [landing page](https://github.com/Avila-Tek/next-template) puedes referirte a este [repositorio](https://github.com/Avila-Tek/next-template).
+## What's inside?
 
-En [Avila Tek](https://avilatek.dev) estamos comprometido con el Open Source, ya que nuestra compañía ha crecido alrededor de esta gran comunidad y a traves de pequeños proyectos, estamos tratado de volver lo que esta comunidad nos ha dado.
+This turborepo uses [npm](https://www.npmjs.com/) as a package manager. It includes the following packages/apps:
 
-## Contenido
+### Apps and Packages
 
-Este repositorio se divide en tres carpetas `client`, `dashboard` y `backend`, como sus nombres indican las existen tres aplicaciones diferentes una para clientes, otra para la parte administrativa y un backend. Tanto `client` como `dashboard` son proyectos de [next.js](https://nextjs.org) mientras que el backend es una api de [GraphQL](https://graphql.org)
+- `docs`: a [Next.js](https://nextjs.org) app
+- `web`: another [Next.js](https://nextjs.org) app
+- `ui`: a stub React component library shared by both `web` and `docs` applications
+- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `tsconfig`: `tsconfig.json`s used throughout the monorepo
 
-## Como usarlo
+Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-Por primero es clonar este repositorio
+### Utilities
 
-```bash
-git clone https://github.com/Avila-Tek/full-stack-template.git <folder_name>
+This turborepo has some additional tools already setup for you:
+
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
+
+### Build
+
+To build all apps and packages, run the following command:
+
+```
+cd my-turborepo
+npm run build
 ```
 
-En donde se debe cambiar `<folder_name>` por el nombre de la carpeta a utilizar. Después git debe eliminarse la carpeta `.git` de este repositorio e iniciar un nuevo proyecto de git al cual le añadirás el correspondiente remoto. Para ello deberás hacer lo siguiente:
+### Develop
 
-```bash
-cd <folder_name>
-sudo rm -r .git/
-git init
+To develop all apps and packages, run the following command:
+
+```
+cd my-turborepo
+npm run dev
 ```
 
-Una vez configurado git deberás instalar las dependencias
+### Remote Caching
 
-```bash
-cd client && npm install && cd ../
-cd dashboard && npm install && cd ../
-cd backend && npm install && cd ../
+Turborepo can use a technique known as [Remote Caching](https://turborepo.org/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+
+By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+
+```
+cd my-turborepo
+npx turbo login
 ```
 
-### Iniciar los servidores
+This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
 
-Deberás comunicarte con el Lead Engineer para que te facilite, los accesos a la base de datos, este deberá facilitar las variables de entorno en un (o varios) archivo `.env` **El cual no deberás incluir en git por ningún motivo**, en los repositorios esta disponible un ejemplo de los archivo por aplicación para que te guíes y debes construirlos tu mismo
+Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your turborepo:
 
-Luego deberás tener multiples ventanas (o pestañas) de la terminal abierta para ejecutar `npm run dev` en las 3 carpetas y tendrás en ejecución los 3 servicios:
+```
+npx turbo link
+```
 
-1. El client frontend en [http://localhost:7777](http://localhost:7777)
-2. El dashboard frontend en [http://localhost:8888](http://localhost:8888)
-3. El backend en [http://localhost:5555/graphql](http://localhost:5555/graphql)
+## Useful Links
 
-### Configurar Sentry
+Learn more about the power of Turborepo:
 
-Para configurar Sentry comunicate con el Lead Engineer para que te facilite los token de sentry y como referencia puedes leer el ejemplo de [Next.js](https://github.com/vercel/next.js/tree/canary/examples/with-sentry) para el caso de las app de frontend, en el backend el Lead deberá incluir en las variables de entorno el DSN de sentry.
-
-## Documentación Adicional
-
-- Si deseas revisar la documentación de backend puedes hacerlo [aquí](/backend/README.md)
-- Si tienes alguna duda de [Next.js](https://nextjs.org/docs)
-- Cualquier otra duda puedes comunicarte con el Lead Engineer o el CTO.
-
-## Changelog
-
-Puedes revisar el changelog [aquí](/CHANGELOG.md)
-
-## Licencia
-
-Este proyecto se encuentra bajo la licencia de MIT
-
-## Autores
-
-1. [Jose R. Quevedo](https://github.com/zoomelectrico)
-2. [Luis E. Bello](https://github.com/luiseduardobello)
+- [Pipelines](https://turborepo.org/docs/core-concepts/pipelines)
+- [Caching](https://turborepo.org/docs/core-concepts/caching)
+- [Remote Caching](https://turborepo.org/docs/core-concepts/remote-caching)
+- [Scoped Tasks](https://turborepo.org/docs/core-concepts/scopes)
+- [Configuration Options](https://turborepo.org/docs/reference/configuration)
+- [CLI Usage](https://turborepo.org/docs/reference/command-line-reference)

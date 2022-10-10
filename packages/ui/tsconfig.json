@@ -1,0 +1,8 @@
+{
+  "extends": "@avila-tek/tsconfig/react-library.json",
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules"],
+  "compilerOptions": {
+    "typeRoots": ["./src/types/*", "./node_modules/@types/*"]
+  }
+}

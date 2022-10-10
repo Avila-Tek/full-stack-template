@@ -1,12 +1,69 @@
 version: '2'
 
 services:
-  api-dev:
+  traefik:
+    image: 'traefik:v2.9'
+    container_name: 'traefik'
+    command:
+      - '--log.level=DEBUG'
+      - '--api=true'
+      - '--api.insecure=true'
+      - '--providers.docker=true'
+      - '--entrypoints.web.address=:80'
+      - '--entrypoints.web.http.redirections.entryPoint.to=websecure'
+      - '--entrypoints.websecure.address=:443'
+      - '--providers.docker.exposedbydefault=true'
+      - '--certificatesresolvers.le.acme.tlschallenge=true'
+      - '--certificatesresolvers.le.acme.email=soporte@avilatek.dev'
+      - '--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+      - '8080:8080'
+    volumes:
+      - './letsencrypt:/letsencrypt'
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    networks:
+      - traefik-net
+
+  api:
     build:
-      context: ./backend
-    image: api-dev
-    container_name: api-dev
-    env_file: ./backend/src/variables.env
+      context: .
+      dockerfile: api.Dockerfile
+    image: api
+    container_name: api
+    env_file: ./apps/api/src/variables.env
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    mem_limit: 2g
+    memswap_limit: -1
+    mem_swappiness: 20
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.api.rule=Host(`api.dev.spacars.app`)'
+      - 'traefik.port=3000'
+      - 'traefik.http.routers.api.entrypoints=websecure'
+      - 'traefik.http.routers.api.tls.certresolver=le'
+    networks:
+      - traefik-net
+
+  client:
+    build:
+      context: .
+      dockerfile: client.Dockerfile
+      args:
+        NEXT_PUBLIC_SENTRY_DSN: $NEXT_PUBLIC_SENTRY_DSN_CLIENT
+        SENTRY_URL: $SENTRY_URL
+        SENTRY_ORG: $SENTRY_ORG
+        SENTRY_PROJECT: $SENTRY_PROJECT_CLIENT
+        SENTRY_TOKEN: $SENTRY_TOKEN
+    image: client
+    container_name: client
+    env_file: ./apps/client/.env.local
+    depends_on:
+      - 'api'
     restart: unless-stopped
     ports:
       - '3001:3001'
@@ -15,19 +72,28 @@ services:
     mem_swappiness: 20
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.api-dev.rule=Host(`api.css-aes.avilatek.com`)'
-      - 'traefik.port=3004'
-      - 'traefik.http.routers.api-dev.entrypoints=websecure'
-      - 'traefik.http.routers.api-dev.tls.certresolver=api-dev'
+      - 'traefik.http.routers.client.rule=Host(`dev.spacars.app`)'
+      - 'traefik.port=3001'
+      - 'traefik.http.routers.client.entrypoints=websecure'
+      - 'traefik.http.routers.client.tls.certresolver=le'
+    networks:
+      - traefik-net
 
-  admin-dev:
+  admin:
     build:
-      context: ./dashboard
-    image: admin-dev
-    container_name: admin-dev
-    env_file: ./dashboard/.env.local
+      context: .
+      dockerfile: admin.Dockerfile
+      args:
+        NEXT_PUBLIC_SENTRY_DSN: $NEXT_PUBLIC_SENTRY_DSN_ADMIN
+        SENTRY_URL: $SENTRY_URL
+        SENTRY_ORG: $SENTRY_ORG
+        SENTRY_PROJECT: $SENTRY_PROJECT_ADMIN
+        SENTRY_TOKEN: $SENTRY_TOKEN
+    image: admin
+    container_name: admin
+    env_file: ./apps/admin/.env.local
     depends_on:
-      - 'api-dev'
+      - 'api'
     restart: unless-stopped
     ports:
       - '3002:3002'
@@ -36,49 +102,13 @@ services:
     mem_swappiness: 20
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.admin-dev.rule=Host(`admin.css-aes.avilatek.com`)'
-      - 'traefik.port=3004'
-      - 'traefik.http.routers.admin-dev.entrypoints=websecure'
-      - 'traefik.http.routers.admin-dev.tls.certresolver=admin-dev'
+      - 'traefik.http.routers.admin.rule=Host(`admin.dev.spacars.app`)'
+      - 'traefik.port=3002'
+      - 'traefik.http.routers.admin.entrypoints=websecure'
+      - 'traefik.http.routers.admin.tls.certresolver=le'
+    networks:
+      - traefik-net
 
-  client-dev:
-    build:
-      context: ./client
-    image: client-dev
-    container_name: client-dev
-    env_file: ./client/.env.local
-    depends_on:
-      - 'api-dev'
-    restart: unless-stopped
-    ports:
-      - '3003:3003'
-    mem_limit: 2g
-    memswap_limit: -1
-    mem_swappiness: 20
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.client-dev.rule=Host(`css-aes.avilatek.com`)'
-      - 'traefik.port=3004'
-      - 'traefik.http.routers.client-dev.entrypoints=websecure'
-      - 'traefik.http.routers.client-dev.tls.certresolver=client-dev'
-
-  traefik:
-    image: 'traefik:v2.8'
-    container_name: 'traefik'
-    command:
-      - '--log.level=DEBUG'
-      - '--api.insecure=true'
-      - '--providers.docker=true'
-      - '--providers.docker.exposedbydefault=true'
-      - '--entrypoints.web.address=:80'
-      - '--entrypoints.websecure.address=:443'
-      - '--certificatesresolvers.affiliations.acme.tlschallenge=true'
-      - '--certificatesresolvers.affiliations.acme.email=soporte@avilatek.dev'
-      - '--certificatesresolvers.affiliations.acme.storage=/letsencrypt/acme.json'
-    restart: unless-stopped
-    ports:
-      - '80:80'
-      - '443:443'
-      - '8080:8080'
-    volumes:
-      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+networks:
+  traefik-net:
+    driver: bridge
