@@ -21,7 +21,7 @@
     "clean": "rimraf ./dist"
   },
   "devDependencies": {
-    "@avila-tek/config": "*",
+    "eslint-config-custom": "*",
     "@avila-tek/tsconfig": "*",
     "@types/bcryptjs": "^2.4.2",
     "@types/body-parser": "^1.19.2",

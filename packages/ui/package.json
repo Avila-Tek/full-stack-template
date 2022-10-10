@@ -17,7 +17,7 @@
     "clean": "rimraf ./.turbo ./node_modules ./dist"
   },
   "devDependencies": {
-    "@avila-tek/config": "*",
+    "eslint-config-custom": "*",
     "@avila-tek/tsconfig": "*",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.3",
@@ -41,15 +41,15 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.3",
-    "@heroicons/react": "^1.0.6",
-    "@react-google-maps/api": "^2.13.1",
+    "@heroicons/react": "^2.0.12",
+    "@tanstack/match-sorter-utils": "^8.5.14",
+    "@tanstack/react-table": "^8.5.15",
     "avilatek-utils": "^0.1.0",
     "axios": "^1.1.2",
     "dayjs": "^1.11.5",
     "react": "^18.2.0",
     "react-dropzone": "^14.2.2",
     "react-phone-input-2": "^2.15.1",
-    "react-table": "^7.8.0",
     "uuid": "^9.0.0"
   }
 }

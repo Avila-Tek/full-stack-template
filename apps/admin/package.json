@@ -35,7 +35,7 @@
     "venezuela": "^2.0.0"
   },
   "devDependencies": {
-    "@avila-tek/config": "*",
+    "eslint-config-custom": "*",
     "@avila-tek/tsconfig": "*",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.3",

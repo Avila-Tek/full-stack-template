@@ -25,5 +25,5 @@ const sentryWebpackPluginOptions = {
 // ensure that your source maps include changes from all other Webpack plugins
 module.exports =
   process.env.NODE_ENV === 'production'
-    ? withSentryConfig(withTM(moduleExports), sentryWebpackPluginOptions)
+    ? withTM(moduleExports) // ? withSentryConfig(withTM(moduleExports), sentryWebpackPluginOptions)
     : withTM(moduleExports);

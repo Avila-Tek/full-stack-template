@@ -1,1 +1,1 @@
-module.exports = require('@avila-tek/config/eslint-preset');
+module.exports = require('eslint-config-custom/eslint-preset');
