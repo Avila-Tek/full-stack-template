@@ -33,7 +33,7 @@
     "eslint-config-avilatek": "^1.13.0",
     "eslint-config-avilatek-typescript": "^1.13.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-react": "^7.31.8",
+    "eslint-plugin-react": "^7.31.9",
     "postcss": "^8.4.17",
     "tailwindcss": "^3.1.8",
     "tsup": "^6.2.3",
