@@ -1,16 +1,16 @@
 import React from 'react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useQuery } from '@apollo/client';
 import { User } from '../models';
-import { CURRENT_USER } from '../graphql/queries';
 
-export type TUserContext = {
+interface IUserContext {
   user: User;
   setUser: React.Dispatch<React.SetStateAction<User>>;
-};
+}
 
-export const UserContext = React.createContext<TUserContext>({
+export const UserContext = React.createContext<IUserContext>({
   user: null,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setUser: () => {},
 });
 
@@ -19,36 +19,22 @@ interface UserContextProviderProps {
 }
 
 export function UserContextProvider({ children }: UserContextProviderProps) {
+  const session = useSession();
+  console.log('session', session);
+  const [user, setUser] = React.useState<User>(null);
   const router = useRouter();
-
-  const [user, setUser] = React.useState<User | null>(null);
-
-  const [loading, setLoading] = React.useState(true);
-
-  const {
-    loading: loadingUser,
-    data: dataUser,
-    error: errorUser,
-  } = useQuery<{
-    currentUser: User;
-  }>(CURRENT_USER);
-
   React.useEffect(() => {
-    if (!loadingUser) {
-      if (dataUser?.currentUser) {
-        setUser(dataUser.currentUser);
-      } else if (errorUser || !dataUser?.currentUser) {
-        setUser(null);
-        router.push('/');
-      }
-      setLoading(false);
+    if (session.status === 'authenticated') {
+      setUser(session.data.user as User);
+    } else if (session.status === 'unauthenticated') {
+      router.push('/sign-in');
+      setUser(null);
     }
-  }, [dataUser, errorUser, loadingUser]);
-
-  const context = React.useMemo(() => ({ user, setUser }), [user, setUser]);
-  return (
-    <UserContext.Provider value={context}>
-      {loading ? <p>Loading...</p> : children}
-    </UserContext.Provider>
-  );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session?.data?.user, session?.status]);
+  const value = React.useMemo(() => ({ user, setUser }), [user]);
+  if (session.status === 'loading') {
+    return null;
+  }
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }

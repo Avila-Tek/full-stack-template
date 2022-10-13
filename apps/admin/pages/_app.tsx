@@ -4,7 +4,12 @@ import Router from 'next/router';
 import Head from 'next/head';
 import { AppProps } from 'next/app';
 import { ApolloProvider } from '@apollo/client';
-import { ToastContextProvider, UserContextProvider } from '../context';
+import { SessionProvider } from 'next-auth/react';
+import {
+  ThemeContextProvider,
+  ToastContextProvider,
+  UserContextProvider,
+} from '../context';
 import { useApollo } from '../hooks';
 import '../style.css';
 
@@ -24,19 +29,46 @@ function MyApp({ Component, pageProps, err }: AppProps<any>) {
       NProgress.done();
     });
   }, []);
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+      if (
+        localStorage.theme === 'dark' ||
+        (!('theme' in localStorage) &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches)
+      ) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+
+      // Whenever the user explicitly chooses light mode
+      localStorage.theme = 'light';
+
+      // Whenever the user explicitly chooses dark mode
+      localStorage.theme = 'dark';
+
+      // Whenever the user explicitly chooses to respect the OS preference
+      localStorage.removeItem('theme');
+    }
+  }, []);
   return (
-    <ApolloProvider client={apolloClient}>
-      <>
-        <Head>
-          <title>Avila Tek | Template</title>
-        </Head>
-        <ToastContextProvider>
-          <UserContextProvider>
-            <Component {...pageProps} err={err} />
-          </UserContextProvider>
-        </ToastContextProvider>
-      </>
-    </ApolloProvider>
+    <SessionProvider session={pageProps.session} refetchInterval={0}>
+      <ApolloProvider client={apolloClient}>
+        <>
+          <Head>
+            <title>Avila Tek | Template</title>
+          </Head>
+          <ThemeContextProvider>
+            <ToastContextProvider>
+              <UserContextProvider>
+                <Component {...pageProps} err={err} />
+              </UserContextProvider>
+            </ToastContextProvider>
+          </ThemeContextProvider>
+        </>
+      </ApolloProvider>
+    </SessionProvider>
   );
 }
 

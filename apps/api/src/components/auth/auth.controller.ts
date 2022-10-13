@@ -67,7 +67,6 @@ const signIn = schemaComposer.createResolver<
   async resolve({ args, context }) {
     const browser = browserDetect(context.req.headers['user-agent']);
     const { user, token } = await authService.signIn(args.data, browser);
-    context.res.cookie('token', token, cookieConfig);
     return { user, token };
   },
 });

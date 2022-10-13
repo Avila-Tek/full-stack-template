@@ -13,6 +13,11 @@ const moduleExports = {
   // Your existing module.exports
   reactStrictMode: true,
   swcMinify: true,
+  // experimental: {
+  //   images: {
+  //     allowFutureImage: true,
+  //   },
+  // },
 };
 
 const sentryWebpackPluginOptions = {

@@ -118,13 +118,13 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-userSchema.plugin(mongooseAlgolia, {
-  appId: process.env.ALGOLIA_APP_ID,
-  apiKey: process.env.ALGOLIA_PRIVATE_KEY,
-  indexName: 'users',
-  selector: '-password -createdAt -updatedAt',
-  debug: true,
-});
+// userSchema.plugin(mongooseAlgolia, {
+//   appId: process.env.ALGOLIA_APP_ID,
+//   apiKey: process.env.ALGOLIA_PRIVATE_KEY,
+//   indexName: 'users',
+//   selector: '-password -createdAt -updatedAt',
+//   debug: true,
+// });
 
 export const User =
   (models.User as Model<UserDocument> & {
@@ -138,5 +138,11 @@ export const User =
       SetAlgoliaSettings?: any;
     }
   >('User', userSchema);
+
+// User.SyncToAlgolia();
+
+// User.SetAlgoliaSettings({
+//   searchableAttributes: ['name', 'email'],
+// });
 
 export const UserTC = composeMongoose(User);

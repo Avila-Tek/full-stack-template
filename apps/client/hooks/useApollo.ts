@@ -12,7 +12,11 @@ import { ENDPOINT } from '../config';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-function createApolloClient({ token }: { token: string }) {
+type TCreateApolloClient = { token?: string };
+
+export function createApolloClient({
+  token = undefined,
+}: TCreateApolloClient = {}) {
   const authMiddleware = new ApolloLink((operation, forward) => {
     // add the authorization to the headers
     operation.setContext(({ headers = {} }) => ({
