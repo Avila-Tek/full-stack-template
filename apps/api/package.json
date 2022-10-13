@@ -21,7 +21,6 @@
     "clean": "rimraf ./dist"
   },
   "devDependencies": {
-    "eslint-config-custom": "*",
     "@avila-tek/tsconfig": "*",
     "@types/bcryptjs": "^2.4.2",
     "@types/body-parser": "^1.19.2",
@@ -41,6 +40,7 @@
     "eslint": "^8.25.0",
     "eslint-config-avilatek": "^1.13.0",
     "eslint-config-avilatek-typescript": "^1.13.0",
+    "eslint-config-custom": "*",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-react": "^7.31.10",
     "nodemon": "^2.0.20",
@@ -88,7 +88,7 @@
     "swagger-routes-express": "^3.3.2",
     "tslib": "^2.4.0",
     "uuid": "^9.0.0",
-    "venezuela": "^2.0.0",
+    "venezuela": "^1.1.7",
     "xlsx": "^0.18.5",
     "xml2js": "^0.4.23"
   }
