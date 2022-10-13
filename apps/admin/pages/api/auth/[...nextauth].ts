@@ -5,6 +5,11 @@ import FacebookProvider from 'next-auth/providers/facebook';
 import GithubProvider from 'next-auth/providers/github';
 import TwitterProvider from 'next-auth/providers/twitter';
 import Auth0Provider from 'next-auth/providers/auth0';
+import { createApolloClient } from '../../../hooks/useApollo';
+import { SIGN_IN } from '../../../graphql/mutation';
+import { User } from '../../../models';
+
+const apolloClient = createApolloClient();
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -17,29 +22,31 @@ export const authOptions: NextAuthOptions = {
     verifyRequest: '/auth/verify-request',
     newUser: '/sign-up',
   },
-  // https://next-auth.js.org/configuration/providers/oauth
   providers: [
     CredentialsProvider({
-      // The name to display on the sign in form (e.g. 'Sign in with...')
       name: 'Credentials',
       credentials: {
-        username: { label: 'Username', type: 'email' },
+        email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
-        // TODO: GraphQL
-        const res = await fetch('http://localhost:3000/api/users?login=true', {
-          method: 'POST',
-          body: JSON.stringify(credentials),
-          headers: { 'Content-Type': 'application/json' },
+        const { data, errors } = await apolloClient.mutate<{
+          signIn: { user: User };
+        }>({
+          mutation: SIGN_IN,
+          variables: {
+            data: {
+              email: credentials.email,
+              password: credentials.password,
+            },
+          },
         });
-        const user = await res.json();
-
-        // If no error and we have user data, return it
-        if (res.ok && user) {
-          return user;
+        if (Array.isArray(errors) && errors.length > 0) {
+          throw new Error(errors[0].message);
         }
-        // Return null if user data could not be retrieved
+        if (data && data?.signIn && data?.signIn?.user) {
+          return data?.signIn?.user ?? {};
+        }
         return null;
       },
     }),
@@ -85,8 +92,6 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.user = JSON.stringify(user);
       }
-
-      // token.userRole = 'admin';
       return token;
     },
     async session({ session, token }) {

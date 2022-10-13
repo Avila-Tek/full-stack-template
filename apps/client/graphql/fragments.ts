@@ -7,7 +7,6 @@ export const UserFragment = gql`
     lastName
     userType
     email
-    password
     locale
     dni
     dniType

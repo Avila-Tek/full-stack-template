@@ -30,7 +30,6 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
-        console.log(JSON.stringify(process.env, null, 2));
         const { data, errors } = await apolloClient.mutate<{
           signIn: { user: User };
         }>({
@@ -90,14 +89,12 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
-      console.log({ token, user });
       if (user) {
         token.user = JSON.stringify(user);
       }
       return token;
     },
     async session({ session, token }) {
-      console.log({ token, session });
       session.user = JSON.parse(token.user as string);
       return session;
     },
