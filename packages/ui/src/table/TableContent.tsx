@@ -1,6 +1,5 @@
 import React from 'react';
 import { flexRender } from '@tanstack/react-table';
-import { useRouter } from 'next/router';
 import { useTable } from './Table';
 
 export interface MongooseModel {
@@ -11,17 +10,14 @@ export interface MongooseModel {
 }
 
 interface TableContentProps {
-  href: string;
-  path: string;
+  onClickRow?: (event: React.MouseEvent<HTMLTableRowElement>) => void;
+  onKeyDownOrUpRow?: (event: React.KeyboardEvent<HTMLTableRowElement>) => void;
 }
 
-export default function TableContent<T extends MongooseModel>({
-  href,
-  path,
-}: TableContentProps) {
-  const router = useRouter();
-  const table = useTable<T>();
-  const onClick = (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>) => {
+/**
+ *
+ * @example ```js
+ *   const onClick = (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>) => {
     e.preventDefault();
     const { id } = e.currentTarget.dataset;
     if (!id) {
@@ -41,6 +37,15 @@ export default function TableContent<T extends MongooseModel>({
       router.push(href, `${path}/${id}`);
     }
   };
+ *
+ * ```
+ */
+
+export default function TableContent<T extends MongooseModel>({
+  onClickRow: onClick,
+  onKeyDownOrUpRow: onKeyDownOrUp,
+}: TableContentProps) {
+  const table = useTable<T>();
   return (
     <div className="block w-full overflow-x-auto">
       <table className="items-center w-full bg-transparent border-collapse">
