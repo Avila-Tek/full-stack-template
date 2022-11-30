@@ -4,19 +4,16 @@ import {
   HttpLink,
   ApolloLink,
   InMemoryCache,
-  concat,
   NormalizedCacheObject,
+  concat,
 } from '@apollo/client';
-
+import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
+import { sha256 } from 'crypto-hash';
 import { ENDPOINT } from '../config';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-type TCreateApolloClient = { token?: string };
-
-export function createApolloClient({
-  token = undefined,
-}: TCreateApolloClient = {}) {
+function createApolloClient({ token }: { token: string }) {
   const authMiddleware = new ApolloLink((operation, forward) => {
     // add the authorization to the headers
     operation.setContext(({ headers = {} }) => ({
@@ -32,10 +29,14 @@ export function createApolloClient({
     uri: ENDPOINT,
     credentials: 'include',
   });
+  const cache = new InMemoryCache({});
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: concat(authMiddleware, httpLink),
-    cache: new InMemoryCache({}),
+    link: concat(
+      concat(createPersistedQueryLink({ sha256 }), authMiddleware),
+      httpLink
+    ),
+    cache,
   });
 }
 

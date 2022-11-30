@@ -1,9 +1,12 @@
-import { ApolloError } from 'apollo-server-errors';
+import { GraphQLError } from 'graphql';
 
-export class NoSentryError extends ApolloError {
+export class NoSentryError extends GraphQLError {
   constructor(message: string) {
-    super(message, 'NO_SENTRY');
-
-    Object.defineProperty(this, 'name', { value: 'NoSentryError' });
+    super(message, {
+      extensions: {
+        code: 'NO_SENTRY',
+        name: 'NoSentryError',
+      },
+    });
   }
 }

@@ -2,17 +2,23 @@
 /* eslint-disable class-methods-use-this */
 import * as Sentry from '@sentry/node';
 import jwt from 'jsonwebtoken';
+import type { Request, Response } from 'express';
 import {
   ApolloServerPlugin,
   GraphQLRequestContext,
   GraphQLRequestContextDidEncounterErrors,
   GraphQLRequestListener,
-} from 'apollo-server-plugin-base';
+} from '@apollo/server';
+
+interface IContext {
+  req: Request;
+  res: Response;
+}
 
 export class SentryPlugin implements ApolloServerPlugin {
   requestDidStart(
-    _requestContext: GraphQLRequestContext
-  ): Promise<GraphQLRequestListener | void> {
+    _requestContext: GraphQLRequestContext<IContext>
+  ): Promise<GraphQLRequestListener<IContext> | void> {
     return Promise.resolve({
       async didEncounterErrors(
         ctx: GraphQLRequestContextDidEncounterErrors<any>
@@ -23,7 +29,6 @@ export class SentryPlugin implements ApolloServerPlugin {
           );
           Sentry.setUser({
             id: (payload as any).id,
-            email: (payload as any).email,
           });
         }
         for (const err of ctx.errors) {
@@ -32,7 +37,9 @@ export class SentryPlugin implements ApolloServerPlugin {
           if (err?.extensions?.code !== 'NO_SENTRY') {
             // Add scoped report details and send to Sentry
             Sentry.withScope((scope) => {
+              // Annotate whether failing operation was query/mutation/subscription
               scope.setTag('kind', ctx?.operation?.operation);
+              // Log query and variables as extras (make sure to strip out sensitive data!)
               scope.setExtra('query', ctx?.request?.query);
               scope.setExtra('variables', ctx?.request?.variables);
               if (err.path) {
