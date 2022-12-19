@@ -17,7 +17,6 @@ interface BrowserDetectInfo {
 
 // const client = new postmark.ServerClient(process.env.POSTMARK_API_KEY);
 
-const client = new postmark.ServerClient(process.env.POSTMARK_API_KEY);
 const fromEmail = 'notificacions@avilatek.com';
 const adminUrl = process.env.DASHBOARD_URL;
 const clientUrl = process.env.CLIENT_URL;
@@ -62,7 +61,7 @@ export async function sendResetPasswordEmail({
         company_address: companyAddress,
       },
     };
-    return client.sendEmailWithTemplate(emailOptions);
+    // return client.sendEmailWithTemplate(emailOptions);
   } catch (error) {
     console.log(error);
   }

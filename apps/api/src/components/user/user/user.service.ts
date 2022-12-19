@@ -27,7 +27,7 @@ export async function updateOne(
   update: UpdateQuery<IUser>,
   options?: QueryOptions<IUser> | null
 ) {
-  return User.updateOne(filter, update, options).exec();
+  return User.findOneAndUpdate(filter, update, options).exec();
 }
 
 export async function create(user: IUser) {
