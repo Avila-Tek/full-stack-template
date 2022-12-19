@@ -3,7 +3,6 @@
 import * as postmark from 'postmark';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
-import { IUser } from '../components/user/user';
 
 dayjs.locale('es');
 
@@ -23,7 +22,7 @@ const clientUrl = process.env.CLIENT_URL;
 const companyName = 'Caledonia';
 const companyAddress = 'Caracas, Venezuela';
 
-export async function sendWelcomeEmail(user: IUser) {
+export async function sendWelcomeEmail(user: any) {
   const emailOptions = {
     From: `Notificaciones <${fromEmail}>`,
     To: `${user?.email}`,
@@ -34,7 +33,7 @@ export async function sendWelcomeEmail(user: IUser) {
 }
 
 interface ResetPasswordOptions {
-  user: IUser;
+  user: any;
   os: BrowserDetectInfo;
   url: string;
 }

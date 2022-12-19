@@ -1,14 +1,26 @@
-import 'next-auth/jwt';
+import NextAuth from 'next-auth';
 
-// Read more at: https://next-auth.js.org/getting-started/typescript#module-augmentation
-
-declare module 'next-auth/jwt' {
-  interface JWT {
-    /** The user's role. */
-    _id: string;
-    email: string;
-    name: string;
-    privilege: string;
-    company: string;
+declare module 'next-auth' {
+  interface Session {
+    user: {
+      _id?: any;
+      slug?: string;
+      email: string;
+      password: string;
+      firstName: string;
+      lastName: string;
+      locale?: string;
+      permission: Array<any>;
+      userType: any;
+      emailVerify?: boolean;
+      resetTokenValidity?: Date;
+      resetToken?: string;
+      dni?: string;
+      dniType?: any;
+      sessions?: Array<any>;
+      active?: boolean;
+      createdAt?: Date;
+      updatedAt?: Date;
+    };
   }
 }

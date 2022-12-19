@@ -13,7 +13,7 @@ import { ENDPOINT } from '../config';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-function createApolloClient({ token }: { token: string }) {
+export function createApolloClient({ token }: { token?: string } = {}) {
   const authMiddleware = new ApolloLink((operation, forward) => {
     // add the authorization to the headers
     operation.setContext(({ headers = {} }) => ({

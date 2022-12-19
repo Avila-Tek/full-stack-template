@@ -5,22 +5,37 @@ export const UserTypePlural = UserTC.getTypePlural().getTypeName();
 export const UserTypeNotNull = UserTC.getTypeNonNull().getTypeName();
 
 // Create One
-
-const UserCreateInput = UserTC.mongooseResolvers
+export const CreateOneUserInput = UserTC.mongooseResolvers
   .createOne()
   .getArgs()
   .record.type.getTypeName();
+
 // Find One
-const UserFindOneInput = UserTC.mongooseResolvers
+export const UserFindOneFilterInput = UserTC.mongooseResolvers
   .findOne()
   .getArgs()
+  .filter.type.getTypeNonNull();
+export const UserFindOneSortInput = UserTC.mongooseResolvers
+  .findOne()
+  .getArgs()
+  .sort.type.getTypeName();
+
+// Find Many
+export const UserFindManyFilterInput = UserTC.mongooseResolvers
+  .findMany()
+  .getArgs()
   .filter.type.getTypeName();
+export const UserFindManySortInput = UserTC.mongooseResolvers
+  .findMany()
+  .getArgs()
+  .sort.type.getTypeName();
+
 // Update One
-const UserUpdateOneFilterInput = UserTC.mongooseResolvers
+export const UserUpdateOneFilterInput = UserTC.mongooseResolvers
   .updateOne()
   .getArgs()
   .filter.type.getTypeName();
-const UserUpdateOneInput = UserTC.mongooseResolvers
+export const UserUpdateOneInput = UserTC.mongooseResolvers
   .updateOne()
   .getArgs()
   .record.type.getTypeName();

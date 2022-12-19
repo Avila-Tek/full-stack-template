@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { USER_FRAGMENT } from './fragments';
+import { UserFragment } from './fragments';
 
 export const CURRENT_USER = gql`
   query CURRENT_USER {
@@ -9,5 +9,5 @@ export const CURRENT_USER = gql`
       }
     }
   }
-  ${USER_FRAGMENT}
+  ${UserFragment}
 `;

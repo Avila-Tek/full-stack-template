@@ -7,7 +7,6 @@ import TwitterProvider from 'next-auth/providers/twitter';
 import Auth0Provider from 'next-auth/providers/auth0';
 import { createApolloClient } from '../../../hooks/useApollo';
 import { SIGN_IN } from '../../../graphql/mutation';
-import { User } from '../../../models';
 
 const apolloClient = createApolloClient();
 
@@ -30,9 +29,7 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
-        const { data, errors } = await apolloClient.mutate<{
-          signIn: { user: User };
-        }>({
+        const { data, errors } = await apolloClient.mutate({
           mutation: SIGN_IN,
           variables: {
             data: {
@@ -45,7 +42,7 @@ export const authOptions: NextAuthOptions = {
           throw new Error(errors[0].message);
         }
         if (data && data?.signIn && data?.signIn?.user) {
-          return data?.signIn?.user ?? {};
+          return data?.signIn?.user ?? null;
         }
         return null;
       },

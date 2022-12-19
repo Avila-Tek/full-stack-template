@@ -1,3 +1,4 @@
+import { gql } from 'graphql-tag';
 import type {
   Model,
   Document,
@@ -19,6 +20,17 @@ export type Pagination<T> = {
   };
 };
 
+/**
+ * @function paginateModel
+ * @description This function recibe a model and execute all the logic for pagination
+ * @param {number} page - actual page
+ * @param {number} perPage - items per page
+ * @param {Model<any>} model - mongoose model
+ * @param {FilterQuery<any>} filter - filter query
+ * @param {ProjectionType<any>} projection - projection
+ * @param {QueryOptions<any>} options - options
+ * @returns {Pagination<Document<any>>} - pagination object
+ */
 export async function paginateModel<T extends Model<any>, U extends Document>(
   page: number,
   perPage: number,
@@ -50,4 +62,26 @@ export async function paginateModel<T extends Model<any>, U extends Document>(
       hasNextPage: products.length > perPage || page * perPage < count,
     },
   };
+}
+
+export function buildPaginationType(_name: string) {
+  if (typeof _name !== 'string') {
+    throw new TypeError('buildPaginationType: name must be a string');
+  }
+  const name = `${_name.charAt(0).toUpperCase()}${_name.slice(1)}`;
+  return `
+    type ${name}Pagination {
+      count: Int!
+      items: [${name}]!
+      pageInfo: ${name}PageInfo!
+    }
+    type ${name}PageInfo {
+      currentPage: Int
+      perPage: Int
+      itemCount: Int
+      pageCount: Int
+      hasPreviousPage: Boolean
+      hasNextPage: Boolean
+    }
+  `;
 }
