@@ -6,7 +6,7 @@ Tareas realizadas (Agregue los ID de las tareas en ClickUp)
 
 ## Tipo de cambio
 
-Elimine las opciones que no sean relevantes.
+Marque con una x dentro de los `[]` los que apliquen
 
 - [ ] ✨ Nueva funcionalidad (cambio no-breaking que agrega funcionalidad)
 - [ ] 🛠️ Corrección de errores (cambio no-breaking que arregla un error)
