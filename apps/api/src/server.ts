@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable import/newline-after-import */
 /* eslint-disable import/first */
+import a from 'a';
 import http from 'http';
 import dotenv from 'dotenv';
 dotenv.config({ path: './src/variables.env' });
