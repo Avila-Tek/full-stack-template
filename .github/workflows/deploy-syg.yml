@@ -120,11 +120,25 @@ jobs:
           docker system prune -f
           curl --location --request POST 'https://avila-mail.vercel.app/api/lark' \
           --header 'Content-Type: application/json' \
-          --data-raw "{
-              \"action\": \"deploy\",
-              \"project_name\": \"Nuevo Proyecto\",
-              \"env\": \"staging\",
-              \"links\": [\"$CLIENT_URL\", \"$DASHBOARD_URL\"],
-              \"gh_action\": \"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\",
-              \"emails\": \"$EMAILS\"
-          }"
+          --data '{
+              "action": "deploy",
+              "project_name": "Nuevo Proyecto",
+              "env": "staging",
+              "links": ["$CLIENT_URL", "$DASHBOARD_URL"],
+              "gh_action": "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID",
+              "emails": "$EMAILS"
+          }'
+
+      - name: Build failed
+        if: ${{ failure() }}
+        run: |
+          curl --location --request POST 'https://avila-mail.vercel.app/api/lark' \
+          --header 'Content-Type: application/json' \
+          --data '{
+              "action": "failure",
+              "project_name": "Nuevo Proyecto",
+              "env": "staging",
+              "links": ["$CLIENT_URL", "$DASHBOARD_URL"],
+              "gh_action": "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID",
+              "emails": "$EMAILS"
+          }'

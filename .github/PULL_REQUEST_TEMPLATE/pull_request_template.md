@@ -8,10 +8,13 @@ Tareas realizadas (Agregue los ID de las tareas en ClickUp)
 
 Elimine las opciones que no sean relevantes.
 
-- [ ] Corrección de errores (cambio no-breaking que arregla un error)
-- [ ] Nueva funcionalidad (cambio no-breaking que agrega funcionalidad)
-- [ ] Cambio importante (arreglo o característica que haría que la funcionalidad existente no funcionara como se esperaba)
-- [ ] Actualización de la documentación
+- [ ] ✨ Nueva funcionalidad (cambio no-breaking que agrega funcionalidad)
+- [ ] 🛠️ Corrección de errores (cambio no-breaking que arregla un error)
+- [ ] ❌ Cambio importante (arreglo o característica que haría que la funcionalidad existente no funcionara como se esperaba)
+- [ ] 📝 Actualización de la documentación
+- [ ] 🧹 Code refactoring (modificación de la estructura interna del código sin modificar las APIs)
+- [ ] ✅ Build configuration change (modificación de los archivos para hacer deploy)
+- [ ] 🗑️ Chore (actividades que no modificación la interacción con la app, por ejemplo, modificar el archivo de eslint)
 
 ## ¿Cómo se ha probado esto?
 
