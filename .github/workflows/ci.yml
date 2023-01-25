@@ -61,6 +61,6 @@ jobs:
           --data '{
             "title": "Falla en el workflow: ${{ github.run_id }}",
             "body": "Este issue fue creado automáticamente por _GitHub Action workflow_ **${{ github.workflow }}**. \n\n debido a un fallo en la ejecución número: _${{ github.run_id }}_.",
-            "assignees": ["$GITHUB_ACTOR"],
+            "assignees": ["${{ github.actor }}"],
             "labels": ["bug", "build:issue"]
             }'
