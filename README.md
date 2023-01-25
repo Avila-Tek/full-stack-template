@@ -2,7 +2,7 @@
 
 > 🚧 README on the making!
 
-# Turborepo starter
+## Turborepo starter
 
 This is an official npm starter turborepo.
 
