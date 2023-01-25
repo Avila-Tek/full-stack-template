@@ -13,10 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NODE_ENV: CI
-    env:
-     TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-     TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-     TURBO_REMOTE_ONLY: true
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+      TURBO_REMOTE_ONLY: true
 
     steps:
       - name: Check out code
@@ -59,4 +58,3 @@ jobs:
             "assignees": ["$GITHUB_ACTOR"],
             "labels": ["bug", "build:issue"]
             }'
-
