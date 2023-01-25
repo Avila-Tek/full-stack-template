@@ -17,19 +17,28 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: Cache turbo build setup
+        uses: actions/cache@v3
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
       - name: Build images
         working-directory: ./
         env:
-          NODE_ENV: ${{ secrets.NODE_ENV_STG }}
-          PORT: ${{ secrets.PORT_STG }}
+          NODE_ENV: ${{ secrets.NODE_ENV }}
+          TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          PORT: ${{ secrets.PORT }}
           DATABASE: ${{ secrets.DATABASE_STG }}
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN_STG }}
           ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID_STG }}
           ALGOLIA_PUBLIC_KEY: ${{ secrets.ALGOLIA_PUBLIC_KEY_STG }}
           ALGOLIA_PRIVATE_KEY: ${{ secrets.ALGOLIA_PRIVATE_KEY_STG }}
-          SECRET: ${{ secrets.SECRET_STG }}
+          SECRET: ${{ secrets.SECRET }}
           CORS_ORIGINS: ${{ secrets.CORS_ORIGINS_STG }}
           CLIENT_URL: ${{ secrets.CLIENT_URL_STG }}
           DASHBOARD_URL: ${{ secrets.DASHBOARD_URL_STG }}
@@ -52,7 +61,7 @@ jobs:
           SENTRY_DSN_API: ${{ secrets.SENTRY_DSN_API }}
           NEXT_PUBLIC_SENTRY_DSN_ADMIN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN_ADMIN }}
           NEXT_PUBLIC_SENTRY_DSN_CLIENT: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN_CLIENT }}
-
+          EMAILS: ${{ secrets.EMAILS }}
         run: |
           chmod 600 letsencrypt/acme.json
           touch ./.env ./apps/api/src/variables.env ./apps/admin/.env.local ./apps/admin/sentry.properties ./apps/client/.env.local ./apps/client/sentry.properties
@@ -66,6 +75,8 @@ jobs:
           echo "SENTRY_DSN_API=$SENTRY_DSN_API" >> ./.env
           echo "NEXT_PUBLIC_SENTRY_DSN_ADMIN=$NEXT_PUBLIC_SENTRY_DSN_ADMIN" >> ./.env
           echo "NEXT_PUBLIC_SENTRY_DSN_CLIENT=$NEXT_PUBLIC_SENTRY_DSN_CLIENT" >> ./.env
+          echo "TURBO_TEAM=$TURBO_TEAM" >> ./.env
+          echo "TURBO_TOKEN=$TURBO_TOKEN" >> ./.env
           # BACKEND
           echo "NODE_ENV=$NODE_ENV" >> ./apps/api/src/variables.env
           echo "PORT=$PORT" >> ./apps/api/src/variables.env
@@ -86,28 +97,34 @@ jobs:
           echo "INTERCONECTADOS_USER=$INTERCONECTADOS_USER" >> ./apps/api/src/variables.env
           echo "INTERCONECTADOS_PASSWORD=$INTERCONECTADOS_PASSWORD" >> ./apps/api/src/variables.env
           echo "SENTRY_DSN=$SENTRY_DSN_API" >> ./apps/api/src/variables.env
+          echo "TURBO_TEAM=$TURBO_TEAM" >> ./apps/api/src/variables.env
+          echo "TURBO_TOKEN=$TURBO_TOKEN" >> ./apps/api/src/variables.env
           # ADMIN
           echo "NEXT_PUBLIC_GOOGLE_MAPS_KEY=$NEXT_PUBLIC_GOOGLE_MAPS_KEY" >> ./apps/admin/.env.local
-          echo "NEXT_PUBLIC_ALGOLIA_APP_ID=$NEXT_PUBLIC_ALGOLIA_APP_ID" >> ./apps/admin/.env.local
-          echo "NEXT_PUBLIC_ALGOLIA_PUBLIC_KEY=$NEXT_PUBLIC_ALGOLIA_PUBLIC_KEY" >> ./apps/admin/.env.local
+          echo "NEXT_PUBLIC_ALGOLIA_APP_ID=$ALGOLIA_APP_ID" >> ./apps/admin/.env.local
+          echo "NEXT_PUBLIC_ALGOLIA_PUBLIC_KEY=$ALGOLIA_PUBLIC_KEY" >> ./apps/admin/.env.local
           echo "NEXT_PUBLIC_TINY_KEY=$NEXT_PUBLIC_TINY_KEY" >> ./apps/admin/.env.local
           echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN_ADMIN" >> ./apps/admin/.env.local
+          echo "TURBO_TEAM=$TURBO_TEAM" >> ./apps/admin/.env.local
+          echo "TURBO_TOKEN=$TURBO_TOKEN" >> ./apps/admin/.env.local
           # CLIENT
           echo "NEXT_PUBLIC_GOOGLE_MAPS_KEY=$NEXT_PUBLIC_GOOGLE_MAPS_KEY" >> ./apps/client/.env.local
-          echo "NEXT_PUBLIC_ALGOLIA_APP_ID=$NEXT_PUBLIC_ALGOLIA_APP_ID" >> ./apps/client/.env.local
-          echo "NEXT_PUBLIC_ALGOLIA_PUBLIC_KEY=$NEXT_PUBLIC_ALGOLIA_PUBLIC_KEY" >> ./apps/client/.env.local
+          echo "NEXT_PUBLIC_ALGOLIA_APP_ID=$ALGOLIA_APP_ID" >> ./apps/client/.env.local
+          echo "NEXT_PUBLIC_ALGOLIA_PUBLIC_KEY=$ALGOLIA_PUBLIC_KEY" >> ./apps/client/.env.local
           echo "NEXT_PUBLIC_TINY_KEY=$NEXT_PUBLIC_TINY_KEY" >> ./apps/client/.env.local
           echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN_CLIENT" >> ./apps/client/.env.local
+          echo "TURBO_TEAM=$TURBO_TEAM" >> ./apps/client/.env.local
+          echo "TURBO_TOKEN=$TURBO_TOKEN" >> ./apps/client/.env.local
           # DOCKER
-          COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker compose up --build -d
+          COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker compose up --build -d --scale api=3 --scale admin=3 --scale client=3
           docker system prune -f
-          curl --location --request POST 'https://avila-mail.vercel.app/api/send-email' \
+          curl --location --request POST 'https://avila-mail.vercel.app/api/lark' \
           --header 'Content-Type: application/json' \
           --data-raw "{
-              \"template\": \"deploy\",
-              \"name\": \"NuevoProyecto (staging)\",
-              \"GITHUB_REPOSITORY\": \"$GITHUB_REPOSITORY\",
-              \"GITHUB_SHA\": \"$GITHUB_SHA\",
-              \"CORS_ORIGINS\": [\"$CLIENT_URL\", \"$DASHBOARD_URL\"],
-              \"ACTION\": \"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\"
+              \"action\": \"deploy\",
+              \"project_name\": \"Nuevo Proyecto\",
+              \"env\": \"staging\",
+              \"links\": [\"$CLIENT_URL\", \"$DASHBOARD_URL\"],
+              \"gh_action\": \"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\",
+              \"emails\": \"$EMAILS\"
           }"

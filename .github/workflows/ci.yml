@@ -1,4 +1,4 @@
-name: CI
+name: CI - Build
 
 on:
   push:
@@ -13,20 +13,19 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NODE_ENV: CI
-    # To use Remote Caching, uncomment the next lines and follow the steps below.
-    # env:
-    #  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-    #  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-    #  TURBO_REMOTE_ONLY: true
+    env:
+     TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+     TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+     TURBO_REMOTE_ONLY: true
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 2
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 16
           cache: 'npm'
@@ -45,3 +44,19 @@ jobs:
 
       # - name: Test
       #   run: npm run test
+
+      - name: If failure
+        if: ${{ failure() }}
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/${{ github.repository }}/issues \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --header 'X-GitHub-Api-Version: 2022-11-28' \
+          --data '{
+            "title": "Falla en el workflow: ${{ github.run_id }}",
+            "body": "Este issue fue creado automáticamente por _GitHub Action workflow_ **${{ github.workflow }}**. \n\n debido a un fallo en la ejecución número: _${{ github.run_id }}_.",
+            "assignees": ["$GITHUB_ACTOR"],
+            "labels": ["bug", "build:issue"]
+            }'
+
