@@ -47,6 +47,12 @@ jobs:
       - name: If failure
         if: ${{ failure() }}
         run: |
+          echo '{
+            "title": "Falla en el workflow: ${{ github.run_id }}",
+            "body": "Este issue fue creado automáticamente por _GitHub Action workflow_ **${{ github.workflow }}**. \n\n debido a un fallo en la ejecución número: _${{ github.run_id }}_.",
+            "assignees": ["$GITHUB_ACTOR"],
+            "labels": ["bug", "build:issue"]
+            }'
           curl --request POST \
           --url https://api.github.com/repos/${{ github.repository }}/issues \
           --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
@@ -54,7 +60,7 @@ jobs:
           --header 'X-GitHub-Api-Version: 2022-11-28' \
           --data '{
             "title": "Falla en el workflow: ${{ github.run_id }}",
-            "body": "Este issue fue creado automáticamente por _GitHub Action workflow_ **${{ github.workflow }}**. \n\n debido a un fallo en la ejecución número: _${{ github.run_id }}_.",
-            "assignees": ["$GITHUB_ACTOR"],
+            "body": "Este issue fue creado automáticamente por _GitHub Action workflow_ **${{ github.workflow }}**. \n\n debido a un fallo en la ejecución número: [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).",
+            "assignees": ["${{ github.actor }}"],
             "labels": ["bug", "build:issue"]
             }'
