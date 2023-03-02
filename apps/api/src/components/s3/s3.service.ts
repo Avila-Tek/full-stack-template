@@ -1,4 +1,5 @@
 import aws from 'aws-sdk';
+import { S3 } from "@aws-sdk/client-s3";
 import { TSignS3Input } from './s3.dto';
 
 export async function signS3Service(body: TSignS3Input) {
@@ -11,7 +12,7 @@ export async function signS3Service(body: TSignS3Input) {
     ContentType: body.filetype,
     ACL: 'public-read',
   };
-  const s3 = new aws.S3({
+  const s3 = new S3({
     apiVersion: '2021-07-26',
     endpoint: spacesEndpoint,
     region: process.env.AWS_REGION,
