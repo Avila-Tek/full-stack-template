@@ -14,7 +14,7 @@ services:
       - '--entrypoints.websecure.address=:443'
       - '--providers.docker.exposedbydefault=true'
       - '--certificatesresolvers.le.acme.tlschallenge=true'
-      - '--certificatesresolvers.le.acme.email=soporte@avilatek.dev'
+      - '--certificatesresolvers.le.acme.email=devops@avilatek.com'
       - '--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json'
     restart: unless-stopped
     ports:
@@ -32,18 +32,16 @@ services:
       context: .
       dockerfile: api.Dockerfile
     image: api
-    container_name: api
     env_file: ./apps/api/src/variables.env
     restart: unless-stopped
     ports:
-      - '3000:3000'
+      - '3000'
     mem_limit: 2g
     memswap_limit: -1
     mem_swappiness: 20
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.api.rule=Host(`api.dev.spacars.app`)'
-      - 'traefik.port=3000'
+      - 'traefik.http.routers.api.rule=Host(`api.demo.avilatek.com`)'
       - 'traefik.http.routers.api.entrypoints=websecure'
       - 'traefik.http.routers.api.tls.certresolver=le'
     networks:
@@ -60,20 +58,18 @@ services:
         SENTRY_PROJECT: $SENTRY_PROJECT_CLIENT
         SENTRY_TOKEN: $SENTRY_TOKEN
     image: client
-    container_name: client
     env_file: ./apps/client/.env.local
     depends_on:
       - 'api'
     restart: unless-stopped
     ports:
-      - '3001:3001'
+      - '3001'
     mem_limit: 2g
     memswap_limit: -1
     mem_swappiness: 20
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.client.rule=Host(`dev.spacars.app`)'
-      - 'traefik.port=3001'
+      - 'traefik.http.routers.client.rule=Host(`demo.avilatek.com`)'
       - 'traefik.http.routers.client.entrypoints=websecure'
       - 'traefik.http.routers.client.tls.certresolver=le'
     networks:
@@ -90,20 +86,18 @@ services:
         SENTRY_PROJECT: $SENTRY_PROJECT_ADMIN
         SENTRY_TOKEN: $SENTRY_TOKEN
     image: admin
-    container_name: admin
     env_file: ./apps/admin/.env.local
     depends_on:
       - 'api'
     restart: unless-stopped
     ports:
-      - '3002:3002'
+      - '3002'
     mem_limit: 2g
     memswap_limit: -1
     mem_swappiness: 20
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.admin.rule=Host(`admin.dev.spacars.app`)'
-      - 'traefik.port=3002'
+      - 'traefik.http.routers.admin.rule=Host(`admin.demo.avilatek.com`)'
       - 'traefik.http.routers.admin.entrypoints=websecure'
       - 'traefik.http.routers.admin.tls.certresolver=le'
     networks:
