@@ -19,14 +19,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Cache turbo build setup
-        uses: actions/cache@v3
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
-
       - name: Build images
         working-directory: ./
         env:
@@ -120,25 +112,11 @@ jobs:
           docker system prune -f
           curl --location --request POST 'https://avila-mail.vercel.app/api/lark' \
           --header 'Content-Type: application/json' \
-          --data '{
-              "action": "deploy",
-              "project_name": "Nuevo Proyecto",
-              "env": "development",
-              "links": ["$CLIENT_URL", "$DASHBOARD_URL"],
-              "gh_action": "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID",
-              "emails": "$EMAILS"
-          }'
+          --data "{ \"action\": \"deploy\", \"project_name\": \"Nuevo Proyecto\", \"env\": \"development\", \"links\": [\"${CLIENT_URL}\", \"${DASHBOARD_URL}\"], \"gh_action\": \"${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}\", \"emails\": ${EMAILS} }"
 
       - name: Build failed
         if: ${{ failure() }}
         run: |
           curl --location --request POST 'https://avila-mail.vercel.app/api/lark' \
           --header 'Content-Type: application/json' \
-          --data '{
-              "action": "failure",
-              "project_name": "Nuevo Proyecto",
-              "env": "development",
-              "links": ["$CLIENT_URL", "$DASHBOARD_URL"],
-              "gh_action": "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID",
-              "emails": "$EMAILS"
-          }'
+          --data "{ \"action\": \"failure\", \"project_name\": \"Nuevo Proyecto\", \"env\": \"development\", \"links\": [\"${CLIENT_URL}\", \"${DASHBOARD_URL}\"], \"gh_action\": \"${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}\", \"emails\": ${EMAILS} }"
