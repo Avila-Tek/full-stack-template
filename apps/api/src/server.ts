@@ -98,7 +98,7 @@ async function initSever() {
     app.use(
       '/graphql',
       cors<cors.CorsRequest>({
-        origin: JSON.parse(process?.env?.CORS_ORIGIN ?? '[]'),
+        origin: JSON.parse(process?.env?.CORS_ORIGINS ?? '[]'),
         credentials: true,
       }),
       expressMiddleware(server, {

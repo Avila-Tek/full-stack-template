@@ -53,6 +53,7 @@ jobs:
           SENTRY_DSN_API: ${{ secrets.SENTRY_DSN_API }}
           NEXT_PUBLIC_SENTRY_DSN_ADMIN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN_ADMIN }}
           NEXT_PUBLIC_SENTRY_DSN_CLIENT: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN_CLIENT }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           EMAILS: ${{ secrets.EMAILS }}
         run: |
           chmod 600 letsencrypt/acme.json
@@ -69,6 +70,7 @@ jobs:
           echo "NEXT_PUBLIC_SENTRY_DSN_CLIENT=$NEXT_PUBLIC_SENTRY_DSN_CLIENT" >> ./.env
           echo "TURBO_TEAM=$TURBO_TEAM" >> ./.env
           echo "TURBO_TOKEN=$TURBO_TOKEN" >> ./.env
+          echo "RELEASE=dev:$GITHUB_SHA" >> ./.env
           # BACKEND
           echo "NODE_ENV=$NODE_ENV" >> ./apps/api/src/variables.env
           echo "PORT=$PORT" >> ./apps/api/src/variables.env
@@ -89,6 +91,7 @@ jobs:
           echo "INTERCONECTADOS_USER=$INTERCONECTADOS_USER" >> ./apps/api/src/variables.env
           echo "INTERCONECTADOS_PASSWORD=$INTERCONECTADOS_PASSWORD" >> ./apps/api/src/variables.env
           echo "SENTRY_DSN=$SENTRY_DSN_API" >> ./apps/api/src/variables.env
+          echo "RELEASE=dev:$GITHUB_SHA" >> ./apps/api/src/variables.env
           echo "TURBO_TEAM=$TURBO_TEAM" >> ./apps/api/src/variables.env
           echo "TURBO_TOKEN=$TURBO_TOKEN" >> ./apps/api/src/variables.env
           # ADMIN
@@ -97,6 +100,9 @@ jobs:
           echo "NEXT_PUBLIC_ALGOLIA_PUBLIC_KEY=$ALGOLIA_PUBLIC_KEY" >> ./apps/admin/.env.local
           echo "NEXT_PUBLIC_TINY_KEY=$NEXT_PUBLIC_TINY_KEY" >> ./apps/admin/.env.local
           echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN_ADMIN" >> ./apps/admin/.env.local
+          echo "NEXTAUTH_URL=$DASHBOARD_URL" >> ./apps/admin/.env.local
+          echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> ./apps/admin/.env.local
+          echo "RELEASE=dev:$GITHUB_SHA" >> ./apps/admin/.env.local
           echo "TURBO_TEAM=$TURBO_TEAM" >> ./apps/admin/.env.local
           echo "TURBO_TOKEN=$TURBO_TOKEN" >> ./apps/admin/.env.local
           # CLIENT
@@ -105,6 +111,9 @@ jobs:
           echo "NEXT_PUBLIC_ALGOLIA_PUBLIC_KEY=$ALGOLIA_PUBLIC_KEY" >> ./apps/client/.env.local
           echo "NEXT_PUBLIC_TINY_KEY=$NEXT_PUBLIC_TINY_KEY" >> ./apps/client/.env.local
           echo "NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN_CLIENT" >> ./apps/client/.env.local
+          echo "NEXTAUTH_URL=$CLIENT_URL" >> ./apps/client/.env.local
+          echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> ./apps/client/.env.local
+          echo "RELEASE=dev:$GITHUB_SHA" >> ./apps/client/.env.local
           echo "TURBO_TEAM=$TURBO_TEAM" >> ./apps/client/.env.local
           echo "TURBO_TOKEN=$TURBO_TOKEN" >> ./apps/client/.env.local
           # DOCKER

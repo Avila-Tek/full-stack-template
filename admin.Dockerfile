@@ -1,4 +1,4 @@
-FROM node:16-alpine AS base
+FROM node:18-alpine AS base
 RUN apk add --no-cache git libc6-compat tzdata
 ENV TZ=America/Caracas
 ENV SCOPE=admin
@@ -11,7 +11,9 @@ RUN npm ci
 
 # Rebuild the source code only when needed
 FROM base AS builder
+ENV TZ=America/Caracas
 ARG NEXT_PUBLIC_SENTRY_DSN
+ARG RELEASE
 ARG SENTRY_URL
 ARG SENTRY_ORG
 ARG SENTRY_PROJECT
@@ -26,13 +28,15 @@ RUN echo "defaults.project=$SENTRY_PROJECT" >> ./sentry.properties
 RUN echo "auth.token=$SENTRY_TOKEN" >> ./sentry.properties
 RUN rm -f ./pages/_error.js ./next.config.wizardcopy.js ./sentry.client.config.wizardcopy.js ./sentry.server.config.wizardcopy.js
 WORKDIR /app
-RUN NODE_OPTIONS="--max-old-space-size=2048" ./node_modules/.bin/turbo run build --scope=${SCOPE} --filter=${SCOPE} --include-dependencies --no-deps
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+RUN ./node_modules/.bin/turbo run build --scope=${SCOPE} --filter=${SCOPE} --include-dependencies --no-deps
 
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
+ENV TZ=America/Caracas
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001

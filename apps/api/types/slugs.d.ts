@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 export = slugs;
 declare function slugs(
   incString: string,
