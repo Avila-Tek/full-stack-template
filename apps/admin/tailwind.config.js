@@ -8,22 +8,13 @@ const colors = require('tailwindcss/colors');
 module.exports = {
   content: [
     '../../packages/ui/src/**/*.{js,jsx,ts,tsx}',
-    './pages/**/*.{js,jsx,ts,tsx}',
-    './components/**/*.{js,jsx,ts,tsx}',
-    './context/**/*.{js,jsx,ts,tsx}',
+    './src/**/*.{js,jsx,ts,tsx}',
   ],
   darkMode: 'class',
   theme: {
-    screens: {
-      sm: '640px',
-      md: '768px',
-      lg: '1024px',
-      xl: '1280px',
-    },
     extend: {
       colors: {
-        slate: colors.slate,
-        primary: colors.emerald,
+        ...colors,
       },
       fontFamily: {
         sans: [...defaultTheme.fontFamily.sans],
@@ -34,6 +25,5 @@ module.exports = {
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
     require('@tailwindcss/aspect-ratio'),
-    require('@tailwindcss/line-clamp'),
   ],
 };

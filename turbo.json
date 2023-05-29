@@ -1,5 +1,6 @@
 {
   "$schema": "https://turborepo.org/schema.json",
+  "globalEnv": ["NODE_ENV"],
   "pipeline": {
     "clean": {
       "outputs": []
@@ -9,15 +10,9 @@
       "outputs": ["dist/**", ".next/**"]
     },
     "admin#build": {
-      "dependsOn": ["^build", "@avila-tek/ui#build"],
+      "dependsOn": ["^build", "@avila-tek/ui#build", "@avila-tek/models#build"],
       "outputs": [".next/**"],
-      "env": [
-        "NEXT_PUBLIC_GOOGLE_MAPS_KEY",
-        "NEXT_PUBLIC_ALGOLIA_APP_ID",
-        "NEXT_PUBLIC_ALGOLIA_PUBLIC_KEY",
-        "NEXT_PUBLIC_SENTRY_DSN",
-        "NEXT_PUBLIC_TINY_KEY"
-      ]
+      "env": ["NEXT_PUBLIC_RELEASE"]
     },
     "client#build": {
       "dependsOn": ["^build", "@avila-tek/ui#build"],
@@ -32,7 +27,28 @@
     },
     "api#build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "env": [
+        "NODE_ENV",
+        "PORT",
+        "DATABASE",
+        "SENTRY_DSN",
+        "ALGOLIA_APP_ID",
+        "ALGOLIA_PUBLIC_KEY",
+        "ALGOLIA_PRIVATE_KEY",
+        "SECRET",
+        "CORS_ORIGINS",
+        "CLIENT_URL",
+        "DASHBOARD_URL",
+        "POSTMARK_API_KEY",
+        "SENDER_EMAIL",
+        "AWS_BUCKET_NAME",
+        "AWS_REGION",
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY",
+        "INTERCONECTADOS_USER",
+        "INTERCONECTADOS_PASSWORD"
+      ]
     },
     "lint": {
       "outputs": []

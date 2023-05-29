@@ -1,6 +1,19 @@
 version: '2'
 
 services:
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass hF1mocODmW2i5cEydTJmr8NZQJRDub0I
+    volumes:
+      - cache:/data
+    networks:
+      - traefik-net
+
+
   traefik:
     image: 'traefik:v2.9'
     container_name: 'traefik'
@@ -31,6 +44,14 @@ services:
     build:
       context: .
       dockerfile: api.Dockerfile
+      args:
+        SENTRY_URL: $SENTRY_URL
+        SENTRY_ORG: $SENTRY_ORG
+        SENTRY_PROJECT: $SENTRY_PROJECT_API
+        SENTRY_TOKEN: $SENTRY_TOKEN
+        RELEASE: $RELEASE
+        TURBO_TEAM: $TURBO_TEAM
+        TURBO_TOKEN: $TURBO_TOKEN
     image: api
     env_file: ./apps/api/src/variables.env
     restart: unless-stopped
@@ -41,9 +62,10 @@ services:
     mem_swappiness: 20
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.api.rule=Host(`api.demo.avilatek.com`)'
+      - 'traefik.http.routers.api.rule=Host(`api.example.com`)'
       - 'traefik.http.routers.api.entrypoints=websecure'
       - 'traefik.http.routers.api.tls.certresolver=le'
+      - 'traefik.http.middlewares.admin-compress.compress=true'
     networks:
       - traefik-net
 
@@ -57,6 +79,9 @@ services:
         SENTRY_ORG: $SENTRY_ORG
         SENTRY_PROJECT: $SENTRY_PROJECT_CLIENT
         SENTRY_TOKEN: $SENTRY_TOKEN
+        RELEASE: $RELEASE
+        TURBO_TEAM: $TURBO_TEAM
+        TURBO_TOKEN: $TURBO_TOKEN
     image: client
     env_file: ./apps/client/.env.local
     depends_on:
@@ -69,9 +94,10 @@ services:
     mem_swappiness: 20
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.client.rule=Host(`demo.avilatek.com`)'
+      - 'traefik.http.routers.client.rule=Host(`example.com`)'
       - 'traefik.http.routers.client.entrypoints=websecure'
       - 'traefik.http.routers.client.tls.certresolver=le'
+      - 'traefik.http.middlewares.admin-compress.compress=true'
     networks:
       - traefik-net
 
@@ -85,6 +111,9 @@ services:
         SENTRY_ORG: $SENTRY_ORG
         SENTRY_PROJECT: $SENTRY_PROJECT_ADMIN
         SENTRY_TOKEN: $SENTRY_TOKEN
+        RELEASE: $RELEASE
+        TURBO_TEAM: $TURBO_TEAM
+        TURBO_TOKEN: $TURBO_TOKEN
     image: admin
     env_file: ./apps/admin/.env.local
     depends_on:
@@ -97,12 +126,17 @@ services:
     mem_swappiness: 20
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.admin.rule=Host(`admin.demo.avilatek.com`)'
+      - 'traefik.http.routers.admin.rule=Host(`admin.example.com`)'
       - 'traefik.http.routers.admin.entrypoints=websecure'
       - 'traefik.http.routers.admin.tls.certresolver=le'
+      - 'traefik.http.middlewares.admin-compress.compress=true'
     networks:
       - traefik-net
 
 networks:
   traefik-net:
     driver: bridge
+
+volumes:
+  cache:
+    driver: local
