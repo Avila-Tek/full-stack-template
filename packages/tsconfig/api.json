@@ -3,29 +3,36 @@
   "display": "API",
   "extends": "./base.json",
   "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "lib": [
+      "esnext"
+    ],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "outDir": "build",
+    "baseUrl": "src",
     "incremental": true,
-    "target": "es6",
-    "lib": ["ESNext"],
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "preserveWatchOutput": true,
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
-    "forceConsistentCasingInFileNames": true,
     "noEmit": false,
-    "module": "CommonJS",
-    "esModuleInterop": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "allowSyntheticDefaultImports": true,
     "noImplicitAny": false,
-    "moduleResolution": "node",
-    "sourceMap": true,
     "inlineSources": true,
     "noEmitHelpers": true,
-    "importHelpers": true,
-    "paths": {
-      "*": ["node_modules/*", "src/types/*"]
-    },
-    "typeRoots": ["./src/types/*", "./node_modules/@types/*"]
+    "importHelpers": true
   },
-  "include": ["src"]
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

@@ -1,60 +1,57 @@
 {
-  "$schema": "https://turborepo.org/schema.json",
-  "globalEnv": ["NODE_ENV"],
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [
+    "**/.env.*local"
+  ],
+  "globalEnv": [
+    "NODE_ENV"
+  ],
   "pipeline": {
-    "clean": {
-      "outputs": []
-    },
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**"]
-    },
-    "admin#build": {
-      "dependsOn": ["^build", "@avila-tek/ui#build", "@avila-tek/models#build"],
-      "outputs": [".next/**"],
-      "env": ["NEXT_PUBLIC_RELEASE"]
-    },
-    "client#build": {
-      "dependsOn": ["^build", "@avila-tek/ui#build"],
-      "outputs": [".next/**"],
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**"
+      ],
       "env": [
-        "NEXT_PUBLIC_GOOGLE_MAPS_KEY",
-        "NEXT_PUBLIC_ALGOLIA_APP_ID",
-        "NEXT_PUBLIC_ALGOLIA_PUBLIC_KEY",
-        "NEXT_PUBLIC_SENTRY_DSN",
-        "NEXT_PUBLIC_TINY_KEY"
-      ]
-    },
-    "api#build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**"],
-      "env": [
-        "NODE_ENV",
-        "PORT",
+        "NEXTAUTH_URL",
+        "NEXTAUTH_SECRET",
         "DATABASE",
-        "SENTRY_DSN",
-        "ALGOLIA_APP_ID",
-        "ALGOLIA_PUBLIC_KEY",
-        "ALGOLIA_PRIVATE_KEY",
-        "SECRET",
-        "CORS_ORIGINS",
-        "CLIENT_URL",
-        "DASHBOARD_URL",
-        "POSTMARK_API_KEY",
-        "SENDER_EMAIL",
-        "AWS_BUCKET_NAME",
-        "AWS_REGION",
-        "AWS_ACCESS_KEY_ID",
-        "AWS_SECRET_ACCESS_KEY",
-        "INTERCONECTADOS_USER",
-        "INTERCONECTADOS_PASSWORD"
+        "LOG_LEVEL",
+        "NODE_ENV"
       ]
     },
-    "lint": {
-      "outputs": []
+    "build#@avila-tek/api": {
+      "env": [
+        "DATABASE",
+        "LOG_LEVEL",
+        "NODE_ENV"
+      ],
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
     },
+    "build#@avila-tek/merchant-center": {
+      "env": [
+        "NEXTAUTH_URL",
+        "NEXTAUTH_SECRET"
+      ]
+    },
+    "build#@avila-tek/storefront": {
+      "env": [
+        "NEXTAUTH_URL",
+        "NEXTAUTH_SECRET"
+      ]
+    },
+    "lint": {},
     "dev": {
-      "cache": false
+      "cache": false,
+      "persistent": true
     }
   }
 }

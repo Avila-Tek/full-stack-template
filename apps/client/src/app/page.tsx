@@ -1,7 +1,43 @@
-import { Inter } from 'next/font/google';
+import { USER_PAGINATION } from '@/graphql/queries';
+import { queryGraphql } from '@/lib/server-query';
+import { Button, Header } from '@avila-tek/ui';
 
-const inter = Inter({ subsets: ['latin'] });
+type TUser = {
+  _id: string;
+  name: string;
+};
 
-export default function Home() {
-  return <main className={inter.className}>Home page</main>;
+type TData = {
+  userPagination: {
+    items: Array<Partial<TUser>>;
+  };
+};
+
+type TVariables = {
+  perPage?: number;
+  page?: number;
+};
+
+export default async function Page() {
+  const data = await queryGraphql<TData, TVariables>({
+    query: USER_PAGINATION,
+    variables: {
+      page: 1,
+      perPage: 10,
+    },
+  });
+  if (!Array.isArray(data?.userPagination?.items)) {
+    return <div />;
+  }
+  return (
+    <>
+      <Header>Storefront</Header>
+      <ul>
+        {data.userPagination.items.map((user) => (
+          <li key={user._id}>{user.name}</li>
+        ))}
+      </ul>
+      <Button />
+    </>
+  );
 }

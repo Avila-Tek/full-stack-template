@@ -1,43 +1,29 @@
 {
   "name": "avila-tek",
-  "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.6",
+    "@commitlint/config-conventional": "^17.6.6",
+    "@turbo/gen": "^1.10.7",
+    "eslint": "^8.44.0",
+    "eslint-config-avila-tek": "*",
+    "husky": "^8.0.3",
+    "prettier": "^3.0.0",
+    "turbo": "latest"
+  },
+  "packageManager": "npm@9.6.7",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
-  "scripts": {
-    "build": "turbo run build",
-    "build:packages": "turbo run build --filter=ui",
-    "dev": "turbo run dev --parallel",
-    "lint": "turbo run lint",
-    "clean": "turbo run clean",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^17.6.3",
-    "@commitlint/config-conventional": "^17.6.3",
-    "@typescript-eslint/eslint-plugin": "^5.59.7",
-    "@typescript-eslint/parser": "^5.59.7",
-    "eslint": "^8.41.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-avilatek": "^1.18.0",
-    "eslint-config-avilatek-typescript": "^1.18.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-html": "^7.1.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "husky": "^8.0.3",
-    "prettier": "^2.8.8",
-    "rimraf": "^5.0.1",
-    "turbo": "^1.9.9",
-    "typescript": "^5.0.4"
-  },
   "engines": {
-    "npm": ">=8.0.0",
-    "node": ">=16.0.0"
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   }
 }

@@ -2,14 +2,8 @@
   "name": "@avila-tek/tsconfig",
   "version": "0.0.0",
   "private": true,
-  "main": "index.js",
-  "scripts": {
-    "build": "echo \"building tsconfig\""
-  },
-  "files": [
-    "base.json",
-    "nextjs.json",
-    "api.json",
-    "react-library.json"
-  ]
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
 }

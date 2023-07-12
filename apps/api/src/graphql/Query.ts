@@ -1,9 +1,5 @@
-import { authQueries } from '../components/auth/auth.controller';
-import { userQueries } from '../components/user/user/user.controller';
+import { userQueries } from '@/components/users/user.controller';
 
-const Query = {
-  ...authQueries,
+export const Query = {
   ...userQueries,
 };
-
-export default Query;

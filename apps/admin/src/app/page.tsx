@@ -1,37 +1,44 @@
-import { gql } from '@apollo/client';
-import { Inter } from 'next/font/google';
-import { getClient } from '../lib/apollo-client';
-import UserList from '../components/UserList';
+import { USER_PAGINATION } from '@/graphql/queries';
+import { queryGraphql } from '@/lib/server-query';
+import { Button, Header } from '@avila-tek/ui';
 
-const inter = Inter({ subsets: ['latin'] });
+type TUser = {
+  _id: string;
+  name: string;
+};
 
-export const dynamic = 'force-dynamic';
+type TData = {
+  userPagination: {
+    items: Array<Partial<TUser>>;
+  };
+};
 
-async function getData() {
-  const { data } = await getClient().query({
-    query: gql`
-      query GET_USERS {
-        users {
-          _id
-        }
-      }
-    `,
+type TVariables = {
+  perPage?: number;
+  page?: number;
+};
+
+export default async function Page() {
+  const data = await queryGraphql<TData, TVariables>({
+    query: USER_PAGINATION,
+    variables: {
+      page: 1,
+      perPage: 10,
+    },
   });
-  return data;
-}
-
-export default async function Home() {
-  const data = await getData();
+  if (!Array.isArray(data?.userPagination?.items)) {
+    return <div />;
+  }
   return (
-    <main className={inter.className}>
-      <h1 className="">Home page</h1>
+    <>
+      <Header>Merchant Center</Header>
+
       <ul>
-        {data?.users?.map((user: any) => (
-          <li key={user._id}>{user._id}</li>
+        {data.userPagination.items.map((user) => (
+          <li key={user._id}>{user.name}</li>
         ))}
       </ul>
-      <hr />
-      <UserList />
-    </main>
+      <Button />
+    </>
   );
 }

@@ -1,56 +1,30 @@
 {
   "name": "@avila-tek/ui",
   "version": "0.0.0",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "sideEffects": false,
-  "private": true,
+  "main": "./index.tsx",
+  "types": "./index.tsx",
   "license": "MIT",
-  "files": [
-    "dist/**"
-  ],
   "scripts": {
-    "build": "tsup src/index.tsx --format cjs --dts --external react @headlessui/react",
-    "dev": "tsup src/index.tsx --format cjs --watch --dts --external react @headlessui/react",
-    "lint": "cross-env TIMING=1 eslint src --fix",
-    "clean": "rimraf ./.turbo ./node_modules ./dist"
+    "lint": "eslint \"**/*.ts*\"",
+    "generate:component": "turbo gen react-component"
   },
   "devDependencies": {
     "@avila-tek/tsconfig": "*",
-    "@tailwindcss/aspect-ratio": "^0.4.2",
-    "@tailwindcss/forms": "^0.5.3",
-    "@tailwindcss/line-clamp": "^0.4.4",
-    "@tailwindcss/typography": "^0.5.9",
-    "@types/react": "^18.2.7",
-    "@types/react-dom": "^18.2.4",
-    "@types/react-table": "^7.7.14",
-    "@typescript-eslint/eslint-plugin": "^5.59.7",
-    "@typescript-eslint/parser": "^5.59.7",
-    "autoprefixer": "^10.4.14",
-    "cross-env": "^7.0.3",
-    "eslint-config-avilatek": "^1.18.0",
-    "eslint-config-avilatek-typescript": "^1.18.0",
-    "eslint-config-custom": "*",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-react": "^7.32.2",
-    "postcss": "^8.4.24",
-    "tailwindcss": "^3.3.2",
-    "tsup": "^6.7.0",
-    "typescript": "^5.0.4"
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.7",
+    "@types/uuid": "^9.0.2",
+    "eslint": "^8.44.0",
+    "eslint-config-avila-tek": "*",
+    "react": "^18.2.0",
+    "typescript": "^5.1.6"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.14",
+    "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.18",
     "@tanstack/match-sorter-utils": "^8.8.4",
-    "@tanstack/react-table": "^8.9.1",
+    "@tanstack/react-table": "^8.9.3",
     "avilatek-utils": "^0.1.0",
-    "axios": "^1.4.0",
-    "dayjs": "^1.11.7",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-dropzone": "^14.2.3",
-    "react-phone-input-2": "^2.15.1",
+    "dayjs": "^1.11.9",
     "uuid": "^9.0.0"
   }
 }

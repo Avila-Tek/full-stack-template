@@ -1,0 +1,16 @@
+'use client';
+
+import React from 'react';
+
+type Props {
+  children?: React.ReactNode;
+}
+
+export function {{ pascalCase name }}({ children }: Props) {
+  return (
+    <div>
+      <h1>{{ name }}</h1>
+      {children}
+    </div>
+  );
+};
