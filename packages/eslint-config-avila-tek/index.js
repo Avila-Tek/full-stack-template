@@ -7,7 +7,7 @@ module.exports = {
     'prettier',
     'plugin:@typescript-eslint/recommended',
   ],
-  plugins: ['html', 'prettier', 'react-hooks', '@typescript-eslint'],
+  plugins: ['html', 'prettier', '@typescript-eslint'],
   rules: {
     '@next/next/no-html-link-for-pages': 'off',
     'no-shadow': 'off',
