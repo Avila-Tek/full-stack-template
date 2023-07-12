@@ -30,7 +30,7 @@ declare module '@tanstack/table-core' {
 }
 
 type TTableContext<T> = {
-  hook: Table<T>;
+  hook: Table<T> | null;
   globalFilter: string;
   setGlobalFilter: React.Dispatch<React.SetStateAction<string>>;
 };

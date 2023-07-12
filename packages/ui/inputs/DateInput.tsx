@@ -134,9 +134,7 @@ export default function DateInput({
           ))}
 
           {/* offset */}
-          {offset?.map((_, i) => (
-            <div key={`offset-${i}`} />
-          ))}
+          {offset?.map((_, i) => <div key={`offset-${i}`} />)}
 
           {/* days */}
           {days?.map((_, i) => {

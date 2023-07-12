@@ -10,6 +10,7 @@ module.exports = {
   plugins: ['html', 'prettier', '@typescript-eslint'],
   rules: {
     '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/no-unused-vars': 'warn',
     '@next/next/no-html-link-for-pages': 'off',
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': [
