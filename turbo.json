@@ -3,9 +3,6 @@
   "globalDependencies": [
     "**/.env.*local"
   ],
-  "globalEnv": [
-    "NODE_ENV"
-  ],
   "pipeline": {
     "build": {
       "dependsOn": [
@@ -14,41 +11,27 @@
       "outputs": [
         ".next/**",
         "!.next/cache/**"
-      ],
-      "env": [
-        "NEXTAUTH_URL",
-        "NEXTAUTH_SECRET",
-        "DATABASE",
-        "LOG_LEVEL",
-        "NODE_ENV"
       ]
     },
-    "build#@avila-tek/api": {
-      "env": [
-        "DATABASE",
-        "LOG_LEVEL",
-        "NODE_ENV"
-      ],
+    "@avila-tek/api#build": {
       "dependsOn": [
-        "^build"
+        "@avila-tek/models#build"
       ],
       "outputs": [
         "dist/**"
       ]
     },
-    "build#@avila-tek/merchant-center": {
-      "env": [
-        "NEXTAUTH_URL",
-        "NEXTAUTH_SECRET"
+    "@avila-tek/web#build": {
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**"
       ]
     },
-    "build#@avila-tek/storefront": {
-      "env": [
-        "NEXTAUTH_URL",
-        "NEXTAUTH_SECRET"
+    "lint": {
+      "dependsOn": [
+        "^lint"
       ]
     },
-    "lint": {},
     "dev": {
       "cache": false,
       "persistent": true

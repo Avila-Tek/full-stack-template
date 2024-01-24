@@ -1,12 +1,10 @@
-'use client';
+import * as React from "react";
 
-import React from 'react';
-
-type Props {
+interface Props {
   children?: React.ReactNode;
 }
 
-export function {{ pascalCase name }}({ children }: Props) {
+export const {{ pascalCase name }} = ({ children }: Props) => {
   return (
     <div>
       <h1>{{ name }}</h1>

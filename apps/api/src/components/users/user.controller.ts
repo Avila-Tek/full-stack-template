@@ -1,11 +1,9 @@
-import { UserTC } from './user.model';
+import type { FastifyRequest, FastifyReply } from 'fastify';
+import { userService } from '@/components/users/user.service';
+import { UserTC } from '@/components/users/user.model';
 
-export const userQueries = {
+export const userQueries = Object.freeze({
   user: UserTC.mongooseResolvers.findOne(),
-  userPagination: UserTC.mongooseResolvers.pagination(),
-};
+});
 
-export const userMutations = {
-  createUser: UserTC.mongooseResolvers.createOne(),
-  updateUser: UserTC.mongooseResolvers.updateOne(),
-};
+export const userMutations = Object.freeze({});

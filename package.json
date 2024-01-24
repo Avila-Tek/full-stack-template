@@ -1,29 +1,24 @@
 {
-  "name": "avila-tek",
+  "name": "full-stack-template-2",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.6.6",
-    "@commitlint/config-conventional": "^17.6.6",
-    "@turbo/gen": "^1.10.7",
-    "eslint": "^8.44.0",
-    "eslint-config-avila-tek": "*",
-    "husky": "^8.0.3",
-    "prettier": "^3.0.0",
+    "@avila-tek/eslint-config": "*",
+    "@avila-tek/typescript-config": "*",
+    "prettier": "^3.2.4",
     "turbo": "latest"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "packageManager": "npm@9.6.7",
   "workspaces": [
     "apps/*",
     "packages/*"
-  ],
-  "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=8.0.0"
-  }
+  ]
 }

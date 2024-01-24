@@ -1,13 +1,14 @@
 {
-  "extends": "@avila-tek/tsconfig/api.json",
+  "extends": "@avila-tek/typescript-config/api.json",
   "compilerOptions": {
-    "sourceRoot": "/",
+    "moduleResolution": "Node",
+    "module": "CommonJS",
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "include": ["src/**/*.ts", "tests/**/*.ts", "tsup.config.ts"],
   "exclude": ["node_modules"]
 }

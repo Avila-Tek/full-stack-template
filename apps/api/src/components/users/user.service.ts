@@ -1,9 +1,14 @@
-import { User } from './user.model';
+import { User } from '@/components/users/user.model';
 
-async function getUsers() {
-  return User.find().exec();
+async function findOne(args: any) {
+  return User.findOne({ ...args });
 }
 
-export const userService = {
-  getUsers,
-};
+async function findAll(args: any) {
+  return User.find({ ...args });
+}
+
+export const userService = Object.freeze({
+  findOne,
+  findAll,
+});

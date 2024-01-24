@@ -1,17 +1,45 @@
 {
   "name": "@avila-tek/models",
   "version": "0.0.0",
-  "main": "./index.ts",
-  "types": "./index.ts",
-  "license": "MIT",
+  "description": "The models of the database",
+  "exports": {
+    "*": "./dist/index.js"
+  },
+  "private": true,
   "scripts": {
-    "lint": "eslint \"**/*.ts*\"",
-    "generate:component": "turbo gen react-component"
+    "lint": "eslint . --max-warnings 0",
+    "build": "tsup",
+    "test": "none"
+  },
+  "repository": {
+    "type": "git",
+    "url": "none"
+  },
+  "keywords": [
+    "db",
+    "models",
+    "mongoose"
+  ],
+  "author": "Avila Tek <devops@avilatek.com>",
+  "license": "ISC",
+  "peerDependencies": {
+    "mongoose": ">=7 || >=8",
+    "zod": ">=3"
   },
   "devDependencies": {
-    "@avila-tek/tsconfig": "*",
-    "eslint": "^8.44.0",
-    "eslint-config-avila-tek": "*",
-    "typescript": "^5.1.6"
+    "@avila-tek/eslint-config": "*",
+    "@avila-tek/typescript-config": "*",
+    "@turbo/gen": "^1.11.3",
+    "@types/eslint": "^8.56.2",
+    "@types/node": "^20.11.6",
+    "eslint": "^8.56.0",
+    "mongoose": "^8.1.0",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "zod": "^3.22.4"
+  },
+  "dependencies": {
+    "argon2": "0.30.3",
+    "slugs": "^0.1.3"
   }
 }
