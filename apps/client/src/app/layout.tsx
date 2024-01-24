@@ -1,4 +1,5 @@
 import { NextAuthProvider } from '../context/AuthContext';
+import { ApolloWrapper } from '../context/ApolloContext';
 import './globals.css';
 
 export const metadata = {
@@ -14,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <NextAuthProvider>{children}</NextAuthProvider>
+        <ApolloWrapper>
+          <NextAuthProvider>{children}</NextAuthProvider>
+        </ApolloWrapper>
       </body>
     </html>
   );

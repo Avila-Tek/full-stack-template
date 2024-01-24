@@ -4,6 +4,7 @@ module.exports = {
     'turbo',
     'next',
     'plugin:@next/next/recommended',
+    'plugin:jest/recommended',
   ],
   rules: {
     '@next/next/no-img-element': 'off',

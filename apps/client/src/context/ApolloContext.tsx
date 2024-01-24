@@ -1,41 +1,31 @@
 'use client';
 
-import { sha256 } from 'crypto-hash';
-import {
-  ApolloClient,
-  ApolloLink,
-  HttpLink,
-  SuspenseCache,
-  concat,
-} from '@apollo/client';
+import { ENDPOINT } from '../../config';
+import { ApolloLink, HttpLink, SuspenseCache } from '@apollo/client';
 import {
   ApolloNextAppProvider,
+  NextSSRApolloClient,
   NextSSRInMemoryCache,
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support/ssr';
-import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries';
-import { ENDPOINT } from '../../config';
 
 function makeClient() {
   const httpLink = new HttpLink({
     uri: ENDPOINT,
+    credentials: 'include',
   });
 
-  return new ApolloClient<any>({
-    cache: new NextSSRInMemoryCache({}) as any,
+  return new NextSSRApolloClient({
+    cache: new NextSSRInMemoryCache(),
     link:
       typeof window === 'undefined'
         ? ApolloLink.from([
-            // in a SSR environment, if you use multipart features like
-            // @defer, you need to decide how to handle these.
-            // This strips all interfaces with a `@defer` directive from your queries.
             new SSRMultipartLink({
               stripDefer: true,
-            }) as any,
-            createPersistedQueryLink({ sha256 }),
+            }),
             httpLink,
           ])
-        : concat(createPersistedQueryLink({ sha256 }), httpLink),
+        : httpLink,
   });
 }
 
