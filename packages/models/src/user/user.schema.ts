@@ -32,6 +32,6 @@ userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
   }
-  this.password = (await hash(this.password, {})).toString();
+  this.password = (await hash(this.password!, {})).toString();
   next();
 });

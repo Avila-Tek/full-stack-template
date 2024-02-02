@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import './globals.css';
 import { QueryProvider } from '@/context/query-context';
+import { ApolloWrapper } from '@/context/apollo-context';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -24,7 +25,9 @@ export default function RootLayout({
           inter.variable
         )}
       >
-        <QueryProvider>{children}</QueryProvider>
+        <ApolloWrapper>
+          <QueryProvider>{children}</QueryProvider>
+        </ApolloWrapper>
       </body>
     </html>
   );

@@ -6,4 +6,8 @@ module.exports = {
   parserOptions: {
     project: true,
   },
+  plugins: ['jest'],
+  env: {
+    jest: true,
+  },
 };
