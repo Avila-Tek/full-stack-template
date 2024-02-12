@@ -8,6 +8,7 @@ import {
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support/ssr';
 import { env } from '@/lib/env';
+import { ENDPOINT } from '@/lib/config';
 
 function makeClient() {
   const httpLink = new HttpLink({

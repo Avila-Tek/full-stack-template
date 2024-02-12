@@ -1,17 +1,15 @@
-'use client';
-
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
+import { getUsers } from '@/services/user';
+import ReactQueryClient from '@/components/example-connect-backend/ReactQueryClient';
 
-function ReactQuery() {
-  const [count, setCount] = React.useState(0);
+const fetchUsers = async () => {
+  return getUsers();
+};
 
-  const { data } = useQuery({
-    queryKey: ['hydrate-users'],
-    queryFn: () => getUsers(),
-  });
-
-  return <div>ReactQuery</div>;
+async function ReactQuery() {
+  const { data, response } = await fetchUsers();
+  return <ReactQueryClient users={data} />;
 }
 
 export default ReactQuery;

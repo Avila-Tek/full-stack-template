@@ -4,7 +4,7 @@ import { ENDPOINT } from './config';
 
 export const getFetch = async <DataType>(
   url: string,
-  schema: z.ZodType<DataType>,
+  schema: z.ZodType<DataType> = z.any() as z.ZodType<DataType>,
   options?: RequestInit
 ): Promise<TFetchOutput<DataType>> => {
   const response = await fetch(ENDPOINT + url, {

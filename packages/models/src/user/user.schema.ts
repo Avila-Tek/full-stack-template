@@ -1,5 +1,4 @@
 import type { z } from 'zod';
-import { hash } from 'argon2';
 import { Schema, type Types, type Document } from 'mongoose';
 import { userDefinition } from './user.dto';
 
@@ -27,11 +26,3 @@ export const userSchema = new Schema<IUser, UserDocument>(
   },
   { timestamps: true }
 );
-
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
-    return next();
-  }
-  this.password = (await hash(this.password!, {})).toString();
-  next();
-});
