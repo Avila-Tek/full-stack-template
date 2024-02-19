@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { render, RenderOptions } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { handlers } from '../__mocks__/handlers';
+import { NextAuthProvider } from '@/context/auth-provider';
 
 // mock @apollo/experimental-nextjs-app-support/rsc
 jest.mock('@apollo/experimental-nextjs-app-support/rsc', () => ({
@@ -12,6 +13,22 @@ jest.mock('@apollo/experimental-nextjs-app-support/rsc', () => ({
     })),
   })),
 }));
+
+// mock next-auth/react
+jest.mock('next-auth/react', () => {
+  const originalModule = jest.requireActual('next-auth/react');
+  const mockSession = {
+    expires: new Date(Date.now() + 2 * 86400).toISOString(),
+    user: { name: 'admin' },
+  };
+  return {
+    __esModule: true,
+    ...originalModule,
+    useSession: jest.fn(() => {
+      return { data: mockSession, status: 'authenticated' };
+    }),
+  };
+});
 
 // // -----------------------------------------------------------------------------
 // This file re-exports everything from React Testing Library and then overrides
@@ -25,7 +42,9 @@ jest.mock('@apollo/experimental-nextjs-app-support/rsc', () => ({
 const AllProviders = ({ children }: { children: React.ReactNode }) => {
   return (
     <React.Suspense fallback={<div>Loading ...</div>}>
-      <MockedProvider mocks={handlers}>{children}</MockedProvider>
+      <NextAuthProvider>
+        <MockedProvider mocks={handlers}>{children}</MockedProvider>
+      </NextAuthProvider>
     </React.Suspense>
   );
 };

@@ -1,6 +1,5 @@
 import nextJest from 'next/jest.js';
 import dotenv from 'dotenv';
-import { set } from 'zod';
 
 // load .env.test environment variables
 dotenv.config({ path: '.env.local' });

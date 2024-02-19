@@ -1,5 +1,7 @@
-import { ApolloError, type QueryOptions } from '@apollo/client';
-import { getClient } from './apollo-client';
+'use server';
+
+import { OperationVariables, type QueryOptions } from '@apollo/client';
+import { getClient } from '@/lib/apollo';
 
 /**
  * @function queryGraphql<TData,TVariables>
@@ -10,7 +12,7 @@ import { getClient } from './apollo-client';
  * ```tsx
  * import { GET_USERS } from '@/graphql/queries';
  * import { queryGraphql } from '@/lib/server-query';
- * import { Button, Header } from '@avila-tek/ui';
+ * import { Button, Header } from '@pomelos/ui';
  *
  * type TUser = {
  *  _id: string;
@@ -34,9 +36,10 @@ import { getClient } from './apollo-client';
  * }
  * ```
  */
-export async function queryGraphql<TData = any, TVariables = any>({
-  ...opts
-}: QueryOptions<TVariables, TData>) {
+export async function queryGraphql<
+  TData = any,
+  TVariables extends OperationVariables = OperationVariables,
+>({ ...opts }: QueryOptions<TVariables, TData>) {
   const { data, error, errors } = await getClient().query({
     ...opts,
   });
@@ -47,7 +50,7 @@ export async function queryGraphql<TData = any, TVariables = any>({
   if (
     typeof errors !== 'undefined' &&
     Array.isArray(errors) &&
-    errors.length > 0
+    errors?.length > 0
   ) {
     console.debug(errors);
     throw new Error('GraphQL errors occurred');

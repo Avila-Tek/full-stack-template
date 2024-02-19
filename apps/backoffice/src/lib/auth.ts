@@ -23,20 +23,21 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials): Promise<any> {
         try {
-          const { data } = await getClient().mutate({
-            mutation: SIGN_IN,
-            variables: {
-              data: {
-                email: credentials?.email,
-                password: credentials?.password,
-              },
-            },
-          });
-          if (data) {
-            return data.signIn;
-          } else {
-            return null;
-          }
+          // const { data } = await getClient().mutate({
+          //   mutation: SIGN_IN,
+          //   variables: {
+          //     data: {
+          //       email: credentials?.email,
+          //       password: credentials?.password,
+          //     },
+          //   },
+          // });
+          // if (data) {
+          //   return data.signIn;
+          // } else {
+          //   return null;
+          // }
+          //   return null;
         } catch (err) {
           console.error((err as any)?.networkError?.result?.errors);
           return null;

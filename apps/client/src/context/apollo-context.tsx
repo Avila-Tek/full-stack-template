@@ -1,5 +1,6 @@
 'use client';
 
+import { env } from '@/env';
 import { ApolloLink, HttpLink } from '@apollo/client';
 import {
   ApolloNextAppProvider,
@@ -7,8 +8,6 @@ import {
   NextSSRInMemoryCache,
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support/ssr';
-import { env } from '@/lib/env';
-import { ENDPOINT } from '@/lib/config';
 
 function makeClient() {
   const httpLink = new HttpLink({

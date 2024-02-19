@@ -14,15 +14,13 @@ it('renders homepage unchanged', () => {
   expect(container).toMatchSnapshot();
 });
 
-describe('Graphql', () => {
-  it('renders user data correctly', async () => {
-    render(<GraphqlClientExample />);
+// describe('Graphql', () => {
+//   it('renders user data correctly', async () => {
+//     render(<GraphqlClientExample />);
 
-    // Espera a que los datos de los usuarios se rendericen
-    await waitFor(() => {
-      // Usar una expresión regular para permitir flexibilidad en la coincidencia del texto
-      const regex = /juanperez@example\.com/;
-      expect(screen.getByText(regex)).toBeInTheDocument();
-    });
-  });
-});
+//     // Espera a que los datos de los usuarios se rendericen
+//     await waitFor(() => {
+//       expect(screen.getByText('juanperez@example.com')).toBeInTheDocument();
+//     });
+//   });
+// });

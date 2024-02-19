@@ -6,6 +6,9 @@
         "name": "next"
       }
     ],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"]
     }
