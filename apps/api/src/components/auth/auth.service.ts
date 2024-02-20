@@ -12,6 +12,19 @@ import {
 } from './auth.dto';
 import * as userService from '../user/user/user.service';
 
+/**
+ * @async
+ * @function createUser
+ * @summary Creates user
+ * @description Creates an user with its corresponding permissions, dni, user type and without verified email
+ * @fires user.service#create
+ * @listens auth.controller#createUser
+ * @param {TCreateUserInput} body
+ * @returns {UserDocument} user
+ * @since 1.0.0
+ * @throws {NoSentryError} User email must be unique
+ * @version 1
+ */
 export async function createUser(body: TCreateUserInput) {
   const _user = await userService.findOne({ email: body.email });
   if (_user) {
