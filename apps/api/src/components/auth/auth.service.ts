@@ -9,7 +9,7 @@ import { TSignInInput } from './auth.dto';
  * @listens auth.controller:signIn
  * @param data {TSignInInput}
  * @requires jsonwebtoken
- * @returns {Object, String} Object with user object and its token as a string
+ * @returns {object} Object with user object and its token as a string
  * @see user.model
  * @since 1.0.0
  * @summary Sign In
