@@ -30,7 +30,7 @@ Un mismo comentario JSDoc puede contar con más de una etiqueta @example.
 
 ## @fires
 Indicar un evento que es desencadenado cuando un método es llamado.
-El código del evento desencadenado debe ser tambien indentificado con la etiqueta @event y @listens haciendo referencia al método que lo desencadena para documentar flujos dentro de la API.
+El código del evento desencadenado debe ser tambien identificado con la etiqueta @event y @listens haciendo referencia al método que lo desencadena para documentar flujos dentro de la API.
 
 ## @function [<FunctionName>]
 Indicar que un item de código es una función.
@@ -78,7 +78,7 @@ Es importante mantener versionado el código e identificar desde qué versión e
 
 ## @summary Summary goes here
 Describir resumidamente la funcionalidad de un item del código.
-A diferencia de la etiqueta de @description que otorga una descripción detallada de la funcionalidad del código, la etiqueta @summary debe servir para buscar rápidamente en qué parte del código está alguna funcionalidad. Debe estar en inglés.
+A diferencia de la etiqueta de @description que otorga una descripción detallada de la funcionalidad del código, la etiqueta @summary debe servir para buscar rápidamente en qué parte del código está alguna funcionalidad. Debe estar en inglés y contar con un máximo de 5 palabras.
 
 ## @throws {<type>} free-form description
 Documentar los errores que una función arroja.

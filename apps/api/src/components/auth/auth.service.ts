@@ -1,7 +1,22 @@
 import jwt from 'jsonwebtoken';
 import { TSignInInput } from './auth.dto';
 
-//! THIS IS MOCK IMPLEMENTATION
+/**
+ * @async
+ * @function
+ * @description This function mocks user authentication using a JWT
+ * @implements TSignInInput
+ * @listens auth.controller:signIn
+ * @param data {TSignInInput}
+ * @requires jsonwebtoken
+ * @returns {Object, String} Object with user object and its token as a string
+ * @see user.model
+ * @since 1.0.0
+ * @summary Sign In
+ * @todo Get user from database
+ * @version 1
+ */
+
 async function signIn(data: TSignInInput) {
   const user = {
     _id: '6553f84c18a72845d4ce631f',
