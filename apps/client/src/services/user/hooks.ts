@@ -6,7 +6,7 @@ export function useUsers(
   options?: UseQueryOptions<any, any, any, any> //<TQueryFnData, TError, TData, TQueryKey>
 ) {
   return useQuery({
-    queryKey: ['users'],
+    queryKey: ['users'], // query key is an array of strings that uniquely identifies this query
     queryFn: () => getUsers(),
     ...options,
   });

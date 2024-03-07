@@ -18,11 +18,24 @@ describe('Graphql', () => {
   it('renders user data correctly', async () => {
     render(<GraphqlClientExample />);
 
-    // Espera a que los datos de los usuarios se rendericen
+    // wait for the data to be loaded
     await waitFor(() => {
-      // Usar una expresión regular para permitir flexibilidad en la coincidencia del texto
+      // use a regex to match the email
       const regex = /juanperez@example\.com/;
       expect(screen.getByText(regex)).toBeInTheDocument();
     });
   });
 });
+
+// describe('REST', () => {
+//   it('renders user data correctly', async () => {
+//     render(<GraphqlClientExample />);
+
+//     // wait for the data to be loaded
+//     await waitFor(() => {
+//       // use a regex to match the email
+//       const regex = /juanperez@example\.com/;
+//       expect(screen.getByText(regex)).toBeInTheDocument();
+//     });
+//   });
+// });

@@ -2,12 +2,11 @@ import React from 'react';
 import { getUsers } from '@/services/user/queries';
 import ReactQueryClientExample from '@/components/example-connect-backend/ReactQueryClientExample';
 
-const fetchUsers = async () => {
-  return getUsers();
-};
-
 async function ReactQuery() {
-  const { data, response } = await fetchUsers();
+  const data = await getUsers();
+
+  console.log(data, 'data in server');
+
   return <ReactQueryClientExample users={data} />;
 }
 

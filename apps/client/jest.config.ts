@@ -15,7 +15,7 @@ const config = {
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-  setupFiles: ['<rootDir>/jest.pollyfils.ts'],
+  // setupFiles: ['<rootDir>/jest.pollyfils.ts'],
 
   // moduleNameMapper: {
   //   '^uuid$': require.resolve('uuid'),

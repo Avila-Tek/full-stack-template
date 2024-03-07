@@ -1,5 +1,4 @@
 import Axios from 'axios';
-import { env } from 'process';
 import { z } from 'zod';
 
 type TFetchInput<DataType> = {
@@ -13,13 +12,11 @@ export const getFetch = async <DataType>({
   schema = z.any() as z.ZodType<DataType>,
   options = {},
 }: TFetchInput<DataType>): Promise<TFetchOutput<DataType>> => {
-  const response = await fetch(env.NEXT_PUBLIC_API_URL + url, {
+  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
     ...options,
   });
-
   const data = await response?.json();
-
-  // VALIDATE RESPONSE WITH ZOD
+  // validate response with zod
   try {
     const parsedData = schema.parse(data);
     return {
@@ -27,7 +24,7 @@ export const getFetch = async <DataType>({
       data: parsedData,
     };
   } catch (error) {
-    // puede manejar este error como desee
+    // you can handle this error however you want
     throw new Error(`Invalid response structure: ${error}`);
   }
 };
@@ -38,7 +35,7 @@ type TFetchOutput<DataType> = {
 };
 
 export const axios = Axios.create({
-  baseURL: env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
@@ -48,7 +45,7 @@ export const axios = Axios.create({
 });
 
 export const axiosS3 = Axios.create({
-  baseURL: env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     'x-amz-acl': 'public-read',
   },

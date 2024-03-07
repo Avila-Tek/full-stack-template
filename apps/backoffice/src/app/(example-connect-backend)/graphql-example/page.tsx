@@ -4,7 +4,7 @@ import { queryGraphql } from '@/lib/server-query';
 import GraphqlClientExample from '@/components/example-connect-backend/GraphqlClientExample';
 
 async function Graphql() {
-  const { data } = await queryGraphql({
+  const data = await queryGraphql({
     query: GET_USER,
   });
 

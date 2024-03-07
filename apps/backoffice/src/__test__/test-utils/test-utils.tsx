@@ -1,9 +1,8 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { render, RenderOptions } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
-import { handlers } from '../__mocks__/handlers';
-import { NextAuthProvider } from '@/context/auth-provider';
+import { QueryProvider } from '@/context/query-context';
+import { QueryClientProvider } from '@tanstack/react-query';
 
 // mock @apollo/experimental-nextjs-app-support/rsc
 jest.mock('@apollo/experimental-nextjs-app-support/rsc', () => ({
@@ -42,9 +41,7 @@ jest.mock('next-auth/react', () => {
 const AllProviders = ({ children }: { children: React.ReactNode }) => {
   return (
     <React.Suspense fallback={<div>Loading ...</div>}>
-      <NextAuthProvider>
-        <MockedProvider mocks={handlers}>{children}</MockedProvider>
-      </NextAuthProvider>
+      <QueryProvider>{children}</QueryProvider>
     </React.Suspense>
   );
 };

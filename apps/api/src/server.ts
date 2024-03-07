@@ -13,8 +13,8 @@ import {
 } from '@as-integrations/fastify';
 import { ProfilingIntegration } from '@sentry/profiling-node';
 import { Integrations } from '@sentry/node';
+import { schema } from './graphql/schema';
 // import { userRoutes } from '@/components/users/user.routes';
-import { schema } from '@/graphql/Schema';
 import mongoose from 'mongoose';
 
 global.XMLHttpRequest = xhr2;

@@ -6,7 +6,11 @@ import { GET_USER } from '@/graphql/queries';
 
 function GraphqlClientExample() {
   // remember to use the correct type for the data
-  const { loading, data, error } = useQuery<any>(GET_USER, {
+  const { loading, data, error } = useQuery<{
+    user: {
+      email: string;
+    };
+  }>(GET_USER, {
     fetchPolicy: 'network-only',
   });
 

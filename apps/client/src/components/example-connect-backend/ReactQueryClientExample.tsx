@@ -13,7 +13,7 @@ function ReactQueryClientExample({ users }: ReactQueryClientProps) {
     initialData: users,
   });
 
-  console.log(data);
+  console.log('data in client', data);
 
   return <div>ReactQueryClient</div>;
 }

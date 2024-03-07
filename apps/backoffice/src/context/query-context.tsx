@@ -1,48 +1,32 @@
 'use client';
 
-import { env } from '@/env';
-import { ApolloLink, HttpLink } from '@apollo/client';
-import {
-  ApolloNextAppProvider,
-  NextSSRApolloClient,
-  NextSSRInMemoryCache,
-  SSRMultipartLink,
-} from '@apollo/experimental-nextjs-app-support/ssr';
-import { PropsWithChildren, useMemo } from 'react';
+import { ReactNode, useState } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental';
 
-function makeClient(token?: string) {
-  return function _makeClient() {
-    const httpLink = new HttpLink({
-      uri: env.NEXT_PUBLIC_API_URL,
-      credentials: 'include',
-      fetchOptions: { cache: 'no-store' },
-    });
+/**
+ * @see https://codesandbox.io/p/devbox/tanstack-query-example-nextjs-suspense-streaming-39yyf8?file=%2Fsrc%2Fapp%2Flayout.tsx%3A21%2C1
+ */
 
-    return new NextSSRApolloClient({
-      cache: new NextSSRInMemoryCache(),
-      link:
-        typeof window === 'undefined'
-          ? ApolloLink.from([
-              new SSRMultipartLink({
-                stripDefer: true,
-              }),
-              httpLink,
-            ])
-          : httpLink,
-    });
-  };
-}
+export function QueryProvider(props: { children: ReactNode }) {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 5 * 1000,
+          },
+        },
+      })
+  );
 
-export function QueryProvider({
-  children,
-  token,
-}: PropsWithChildren<{
-  token?: string;
-}>) {
-  const makeClientMemo = useMemo(() => makeClient(token), [token]);
   return (
-    <ApolloNextAppProvider makeClient={makeClientMemo}>
-      {children}
-    </ApolloNextAppProvider>
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryStreamedHydration>
+        {props.children}
+      </ReactQueryStreamedHydration>
+      {<ReactQueryDevtools initialIsOpen={false} />}
+    </QueryClientProvider>
   );
 }

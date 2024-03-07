@@ -3,7 +3,7 @@
 exports[`renders homepage unchanged 1`] = `
 <div>
   <div>
-    Home
+    Hello world
   </div>
 </div>
 `;

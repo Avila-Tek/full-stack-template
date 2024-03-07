@@ -26,7 +26,9 @@ export default function RootLayout({
         )}
       >
         <QueryProvider>
-          <NextAuthProvider>{children}</NextAuthProvider>
+          {/* <NextAuthProvider> */}
+          {children}
+          {/* </NextAuthProvider> */}
         </QueryProvider>
       </body>
     </html>
