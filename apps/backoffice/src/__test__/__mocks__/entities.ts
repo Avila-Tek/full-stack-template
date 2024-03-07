@@ -1,5 +1,7 @@
 import { IPhone, IUser } from '@avila-tek/models';
 
+// mock every model in the domain
+
 export function mockUser(initialValue: Partial<IUser> = {}): IUser {
   return {
     email: 'juanperez@example.com',

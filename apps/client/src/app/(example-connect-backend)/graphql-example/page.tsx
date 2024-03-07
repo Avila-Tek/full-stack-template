@@ -1,8 +1,9 @@
 import React from 'react';
 import { GET_USER } from '@/graphql/queries';
 import { queryGraphql } from '@/lib/server-query';
-import GraphqlClient from '@/components/example-connect-backend/GraphqlClientExample';
+import GraphqlClient from '@/components/exampleConnectBackend/GraphqlClientExample';
 
+/**  GraphQL query example in server component */
 async function Graphql() {
   const data = await queryGraphql<{
     user: {

@@ -4,6 +4,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_USER } from '@/graphql/queries';
 
+/**  GraphQL query example in client component */
 function GraphqlClientExample() {
   const { loading, data, error } = useQuery<{
     user: {

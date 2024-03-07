@@ -4,8 +4,8 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_USER } from '@/graphql/queries';
 
+/**  GraphQL query example in client component */
 function GraphqlClientExample() {
-  // remember to use the correct type for the data
   const { loading, data, error } = useQuery<{
     user: {
       email: string;
@@ -14,9 +14,13 @@ function GraphqlClientExample() {
     fetchPolicy: 'network-only',
   });
 
-  console.log(data, loading, error);
-
-  return <div>Hello {data?.user?.email}</div>;
+  return (
+    <div>
+      <span>
+        Data in client: <pre>{JSON.stringify(data, null, 2)}</pre>
+      </span>
+    </div>
+  );
 }
 
 export default GraphqlClientExample;
