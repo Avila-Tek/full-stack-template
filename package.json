@@ -5,7 +5,8 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "generate-docs": "jsdoc -d docs --configure jsDocConfig.json"
   },
   "devDependencies": {
     "@avila-tek/eslint-config": "*",
