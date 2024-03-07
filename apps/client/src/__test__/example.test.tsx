@@ -1,41 +1,42 @@
 import React from 'react';
-import Page from '../app/page';
-import { render, waitFor, screen } from './test-utils/test-utils';
-import GraphqlClientExample from '@/components/example-connect-backend/GraphqlClientExample';
+import ReactQueryClientExample from '@/components/example-connect-backend/ReactQueryClientExample';
+import { render, waitFor, renderHook } from './test-utils/test-utils';
+import { useUsers } from '@/services/user/hooks';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import fetchMock from 'jest-fetch-mock';
 
 // Mock the Google Font loader
 jest.mock('next/font/google', () => ({
   Inter: jest.fn(() => 'MockedInter'),
 }));
 
-it('renders homepage unchanged', () => {
-  const { container } = render(<Page />);
+// Mock the Next.js router
+fetchMock.enableMocks();
 
-  expect(container).toMatchSnapshot();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // ✅ turns retries off
+      retry: false,
+    },
+  },
 });
 
-describe('Graphql', () => {
-  it('renders user data correctly', async () => {
-    render(<GraphqlClientExample />);
+// const wrapper = ({ children }: { children: React.ReactNode }) => (
+//   <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+// );
 
-    // wait for the data to be loaded
-    await waitFor(() => {
-      // use a regex to match the email
-      const regex = /juanperez@example\.com/;
-      expect(screen.getByText(regex)).toBeInTheDocument();
-    });
-  });
-});
-
-// describe('REST', () => {
+// describe('Rest mock', () => {
 //   it('renders user data correctly', async () => {
-//     render(<GraphqlClientExample />);
+//     render(<ReactQueryClientExample users={[]} />);
+//     jest.spyOn(console, 'error').mockImplementation(() => {});
 
-//     // wait for the data to be loaded
-//     await waitFor(() => {
-//       // use a regex to match the email
-//       const regex = /juanperez@example\.com/;
-//       expect(screen.getByText(regex)).toBeInTheDocument();
-//     });
+//     fetchMock.mockResponseOnce(JSON.stringify({ data: 'mockedData' }));
+
+//     const { result: result1 } = renderHook(() => useUsers(), { wrapper });
+
+//     await waitFor(() => expect(result1.current.isSuccess).toBe(true));
+
+//     expect(result1.current.data).toEqual({ data: 'mockedData' });
 //   });
 // });

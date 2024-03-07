@@ -5,9 +5,12 @@ import ReactQueryClientExample from '@/components/example-connect-backend/ReactQ
 async function ReactQuery() {
   const data = await getUsers();
 
-  console.log(data, 'data in server');
-
-  return <ReactQueryClientExample users={data} />;
+  return (
+    <>
+      Data in Server: {JSON.stringify(data)}
+      <ReactQueryClientExample users={data} />
+    </>
+  );
 }
 
 export default ReactQuery;

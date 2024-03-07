@@ -1,8 +1,6 @@
 /* eslint-disable turbo/no-undeclared-env-vars */
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { getClient } from '@/lib/apollo';
-import { SIGN_IN } from '@/graphql/mutations';
 
 /**
  * @see https://codevoweb.com/setup-and-use-nextauth-in-nextjs-13-app-directory/

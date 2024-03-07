@@ -11,9 +11,7 @@ function ReactQueryClientExample({ users }: ReactQueryClientProps) {
   // if you need the same query in client and server, you can use initialData
   const { data, isLoading } = useUsers({});
 
-  console.log(data, 'data in client');
-
-  return <div>ReactQueryClient</div>;
+  return <div>Data in Client: {JSON.stringify(data)}</div>;
 }
 
 export default ReactQueryClientExample;

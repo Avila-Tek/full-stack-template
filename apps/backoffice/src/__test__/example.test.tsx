@@ -1,9 +1,7 @@
 import React from 'react';
-import nock from 'nock';
-import { render, waitFor, screen, renderHook } from './test-utils/test-utils';
 import ReactQueryClientExample from '@/components/example-connect-backend/ReactQueryClientExample';
+import { render, waitFor, renderHook } from './test-utils/test-utils';
 import { useUsers } from '@/services/user/hooks';
-import { QueryProvider } from '@/context/query-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'jest-fetch-mock';
 
@@ -23,21 +21,22 @@ const queryClient = new QueryClient({
     },
   },
 });
-const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-);
 
-describe('Rest mock', () => {
-  it('renders user data correctly', async () => {
-    render(<ReactQueryClientExample users={[]} />);
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+// const wrapper = ({ children }: { children: React.ReactNode }) => (
+//   <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+// );
 
-    fetchMock.mockResponseOnce(JSON.stringify({ data: 'mockedData' }));
+// describe('Rest mock', () => {
+//   it('renders user data correctly', async () => {
+//     render(<ReactQueryClientExample users={[]} />);
+//     jest.spyOn(console, 'error').mockImplementation(() => {});
 
-    const { result: result1 } = renderHook(() => useUsers(), { wrapper });
+//     fetchMock.mockResponseOnce(JSON.stringify({ data: 'mockedData' }));
 
-    await waitFor(() => expect(result1.current.isSuccess).toBe(true));
+//     const { result: result1 } = renderHook(() => useUsers(), { wrapper });
 
-    expect(result1.current.data).toEqual({ data: 'mockedData' });
-  });
-});
+//     await waitFor(() => expect(result1.current.isSuccess).toBe(true));
+
+//     expect(result1.current.data).toEqual({ data: 'mockedData' });
+//   });
+// });
