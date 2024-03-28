@@ -14,9 +14,9 @@ export function handleError(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const status = Number(error.message.split('-')[0] ?? 500);
+  const status = Number(error.message?.split('-')?.[0] ?? 500);
 
-  const type = error.message.split('-')[1] ?? 'default';
+  const type = error.message?.split('-')?.[1] ?? 'default';
 
   const standardError: StandardError = {
     type,
