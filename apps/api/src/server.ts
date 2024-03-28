@@ -16,6 +16,7 @@ import { Integrations } from '@sentry/node';
 import { schema } from './graphql/schema';
 // import { userRoutes } from '@/components/users/user.routes';
 import mongoose from 'mongoose';
+import { handleError } from './utils/error/handler';
 
 global.XMLHttpRequest = xhr2;
 
@@ -82,6 +83,8 @@ export async function createServer() {
     origin: JSON.parse(process.env.CORS_ORIGINS ?? '["*"]'),
     credentials: true,
   });
+
+  server.setErrorHandler(handleError);
 
   // routes
   server.route({
