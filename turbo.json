@@ -12,7 +12,9 @@
     "admin#build": {
       "dependsOn": ["^build", "@avila-tek/ui#build", "@avila-tek/models#build"],
       "outputs": [".next/**"],
-      "env": ["NEXT_PUBLIC_RELEASE"]
+      "env": ["NEXT_PUBLIC_RELEASE",
+      "NEXT_PUBLIC_AXIOM_DATASET",
+      "NEXT_PUBLIC_AXIOM_TOKEN"]
     },
     "client#build": {
       "dependsOn": ["^build", "@avila-tek/ui#build"],
@@ -22,7 +24,9 @@
         "NEXT_PUBLIC_ALGOLIA_APP_ID",
         "NEXT_PUBLIC_ALGOLIA_PUBLIC_KEY",
         "NEXT_PUBLIC_SENTRY_DSN",
-        "NEXT_PUBLIC_TINY_KEY"
+        "NEXT_PUBLIC_TINY_KEY",
+        "NEXT_PUBLIC_AXIOM_DATASET",
+        "NEXT_PUBLIC_AXIOM_TOKEN"
       ]
     },
     "api#build": {
@@ -33,6 +37,9 @@
         "PORT",
         "DATABASE",
         "SENTRY_DSN",
+        "AXIOM_TOKEN",
+        "AXIOM_ORG_ID",
+        "AXIOM_DATASET",
         "ALGOLIA_APP_ID",
         "ALGOLIA_PUBLIC_KEY",
         "ALGOLIA_PRIVATE_KEY",

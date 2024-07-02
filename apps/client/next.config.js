@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const { withSentryConfig } = require('@sentry/nextjs');
+const { withAxiom } = require('next-axiom');
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig = withAxiom({
   reactStrictMode: true,
   transpilePackages: ['@avila-tek/ui'],
   output: 'standalone',
@@ -11,7 +12,7 @@ const nextConfig = {
     outputFileTracingRoot: path.join(__dirname, '../../'),
     serverComponentsExternalPackages: [],
   },
-};
+});
 
 const sentryWebpackPluginOptions = {
   silent: true, // Suppresses all logs
